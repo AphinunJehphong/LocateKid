@@ -53,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
         private Context context;
         private String getURLString , myUserString, myPasswordString , truePasswordString;
         private Boolean statusABoolean = true;
+        private int myModechoiceAnInt = 0;
 
-        public SyncAuthen(Context context, String getURLString, String myUserString, String myPasswordString) {
+        public SyncAuthen(int myModechoiceAnInt, Context context, String getURLString, String myUserString, String myPasswordString) {
+            this.myModechoiceAnInt = myModechoiceAnInt;
             this.context = context;
             this.getURLString = getURLString;
             this.myUserString = myUserString;
@@ -157,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
             alert.myDialog(this, "Error" , "โปรดกรอกให้ครบถ้วน");
         } else {
             //มีการประมวลผล
-            SyncAuthen syncAuthen = new SyncAuthen(this, urlPHPStrings[modeChoice]
+            SyncAuthen syncAuthen = new SyncAuthen(modeChoice,this, urlPHPStrings[modeChoice]
             ,usernameString , passwordString);
             syncAuthen.execute();
         } //เงื่อนไขเช็คว่า
