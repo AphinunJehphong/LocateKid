@@ -53,6 +53,45 @@
             android:inputType="textPassword"
             android:textColor="@color/text"
             android:textColorHint="@color/text" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mode"
+                android:id="@+id/textView2"
+                android:textSize="@dimen/headline2"
+                android:textStyle="bold"
+                android:textColor="@color/text" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/choiceMode"
+                android:layout_marginLeft="20dp">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parent"
+                    android:id="@+id/radioButton"
+                    android:textColor="@color/text"
+                    android:checked="true" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/teacher"
+                    android:id="@+id/radioButton2"
+                    android:textColor="@color/text" />
+            </RadioGroup>
+        </LinearLayout>
+
     </LinearLayout>
 
     <Button
@@ -62,5 +101,6 @@
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:textColor="@color/text"
-        android:textColorHint="@color/text" />
+        android:textColorHint="@color/text"
+        android:onClick="clickButton" />
 </RelativeLayout>

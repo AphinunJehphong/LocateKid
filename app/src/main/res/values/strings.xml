@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">LocateKids</string>
+
+    <string name="parent">ผู้ปกครอง</string>
+    <string name="teacher">คุณครูประจำรถ</string>
+
 </resources>
