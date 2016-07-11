@@ -1,11 +1,18 @@
 package cpe.spu.locatekid;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton parentRadioButton, teacherRadioButton;
     private int modeChoice = 0;
-    private String[] urlPHPStrings = new String[]{"http://swiftcodingthai.com/golf1/get_parent.php"
+    private String[] urlPHPStrings = new String[]{"http://swiftcodingthai.com/golf1/get_userparent.php"
             ,"http://swiftcodingthai.com/golf1/get_userteacher.php"};
 
 
@@ -35,6 +42,43 @@ public class MainActivity extends AppCompatActivity {
         choiceMode();
 
     } //main method
+
+    private class SyncAuthen extends AsyncTask<Void, Void, String> {
+
+        //ประกาศตัวแปร
+        private Context context;
+        private String getURLString;
+
+        public SyncAuthen(Context context, String getURLString) {
+            this.context = context;
+            this.getURLString = getURLString;
+        }//constuctor method
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            try {
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(getURLString).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
+            } catch (Exception e) {
+                Log.d("11JulV1", "e doInBack ==> " + e.toString());
+                return null;
+            }
+        } //doInBack
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d("11JulV1", "JSON ==> " + s);
+        }
+    }//Class Sync
+
 
     private void choiceMode() {
 
@@ -70,7 +114,9 @@ public class MainActivity extends AppCompatActivity {
             Alert alert = new Alert();
             alert.myDialog(this, "Error" , "โปรดกรอกให้ครบถ้วน");
         } else {
-            //มีการกระทำ
+            //มีการประมวลผล
+            SyncAuthen syncAuthen = new SyncAuthen(this, urlPHPStrings[modeChoice]);
+            syncAuthen.execute();
         } //เงื่อนไขเช็คว่า
 
     } //เมธอดปุ่มล็อคอิน
