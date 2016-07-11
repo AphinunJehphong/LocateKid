@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         //ประกาศตัวแปร
         private Context context;
-        private String getURLString , myUserString, myPasswordString , truePaswwordString;
+        private String getURLString , myUserString, myPasswordString , truePasswordString;
         private Boolean statusABoolean = true;
 
         public SyncAuthen(Context context, String getURLString, String myUserString, String myPasswordString) {
@@ -93,17 +94,24 @@ public class MainActivity extends AppCompatActivity {
                     if (myUserString.equals(jsonObject.getString("Username"))) {
 
                         statusABoolean = false;
-                        truePaswwordString = jsonObject.getString("Password");
-
+                        truePasswordString = jsonObject.getString("Password");
                     }//if
-
                 }//for
+
             //check User
                 if (statusABoolean) {
                     // ผู้ใช้ใส่ไม่ตรงกับที่มีใน database
                     Alert alert = new Alert();
-                    alert.myDialog(context, "ไม่มี User นี้ในระบบ", "ไม่มี" + myUserString + "ในระบบ หรือ เลือกผิดโหมด");
+                    alert.myDialog(context, "ไม่มี User นี้ในระบบ", "ไม่มี"  +  myUserString  +  "ในระบบ หรือ เลือกผิดโหมด");
+                }
+                else if (myPasswordString.equals(truePasswordString)) {
+                    //Password True
+                    Toast.makeText(context, "Welcome", Toast.LENGTH_SHORT).show();
 
+                } else {
+                    //Password False
+                    Alert alert = new Alert();
+                    alert.myDialog(context, "Incorrect Password","Please Try Again");
                 }
 
             }catch (Exception e){
