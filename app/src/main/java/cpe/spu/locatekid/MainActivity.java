@@ -14,6 +14,9 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
 
     //ประกาศตัวแปร
@@ -47,12 +50,15 @@ public class MainActivity extends AppCompatActivity {
 
         //ประกาศตัวแปร
         private Context context;
-        private String getURLString;
+        private String getURLString , myUserString, myPasswordString , truePaswwordString;
+        private Boolean statusABoolean = true;
 
-        public SyncAuthen(Context context, String getURLString) {
+        public SyncAuthen(Context context, String getURLString, String myUserString, String myPasswordString) {
             this.context = context;
             this.getURLString = getURLString;
-        }//constuctor method
+            this.myUserString = myUserString;
+            this.myPasswordString = myPasswordString;
+        }
 
         @Override
         protected String doInBackground(Void... voids) {
@@ -76,6 +82,34 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             Log.d("11JulV1", "JSON ==> " + s);
+
+            try {
+
+                JSONArray jsonArray = new JSONArray(s);
+                for (int i=0;i<jsonArray.length();i+=1) {
+
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    if (myUserString.equals(jsonObject.getString("Username"))) {
+
+                        statusABoolean = false;
+                        truePaswwordString = jsonObject.getString("Password");
+
+                    }//if
+
+                }//for
+            //check User
+                if (statusABoolean) {
+                    // ผู้ใช้ใส่ไม่ตรงกับที่มีใน database
+                    Alert alert = new Alert();
+                    alert.myDialog(context, "ไม่มี User นี้ในระบบ", "ไม่มี" + myUserString + "ในระบบ หรือ เลือกผิดโหมด");
+
+                }
+
+            }catch (Exception e){
+                Log.d("11JulV1", "e onPost ==> " + e.toString());
+            }
+
         }
     }//Class Sync
 
@@ -115,7 +149,8 @@ public class MainActivity extends AppCompatActivity {
             alert.myDialog(this, "Error" , "โปรดกรอกให้ครบถ้วน");
         } else {
             //มีการประมวลผล
-            SyncAuthen syncAuthen = new SyncAuthen(this, urlPHPStrings[modeChoice]);
+            SyncAuthen syncAuthen = new SyncAuthen(this, urlPHPStrings[modeChoice]
+            ,usernameString , passwordString);
             syncAuthen.execute();
         } //เงื่อนไขเช็คว่า
 
