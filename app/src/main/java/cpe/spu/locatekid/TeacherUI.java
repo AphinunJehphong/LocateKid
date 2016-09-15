@@ -126,7 +126,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
             Log.d("15SepV1", "imageNameString ==> " + imageNameString);
 
-            uploadImageToServer(imagePathString);
+            uploadImageToServer();
 
         }   // if
 
