@@ -1,6 +1,7 @@
 package cpe.spu.locatekid;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
     private int modeChoice = 0;
     private String[] urlPHPStrings = new String[]{"http://swiftcodingthai.com/golf1/get_userparent.php"
             ,"http://swiftcodingthai.com/golf1/get_userteacher.php"};
+    private String[] loginStrings;
+    private String[] teacherStrings = new String[] {"ID_Teacher", "Name_Teacher", "Sur_Teacher", "Tel_Teacher",
+            "Pic_Teacher", "Username", "Password"};
+    private String[] parentStrings = new String[] {"ID_Parent", "Name_Parent", "Sur_Parent", "Tel_Parent",
+            "Pic_Parent", "Username", "Password"};
 
 
     @Override
@@ -46,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         choiceMode();
 
     } //main method
-
+    //class ที่ทำหน้าที่เชื่อมต่อกันกับ json
     private class SyncAuthen extends AsyncTask<Void, Void, String> {
 
         //ประกาศตัวแปร
@@ -65,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... voids) {
-
+            //เช็คค่าการเชื่อมต่อ json กับ database
             try {
 
                 OkHttpClient okHttpClient = new OkHttpClient();
@@ -89,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
             try {
 
                 JSONArray jsonArray = new JSONArray(s);
+                loginStrings = new String[7]; //จอง memmory ของสตริง
+
                 for (int i=0;i<jsonArray.length();i+=1) {
 
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -97,6 +105,35 @@ public class MainActivity extends AppCompatActivity {
 
                         statusABoolean = false;
                         truePasswordString = jsonObject.getString("Password");
+                        //เช็คละ get data จาก database
+                        switch (myModechoiceAnInt){
+
+                            case 0:  //เป็นผู้ปกครอง
+
+                                loginStrings[0] = jsonObject.getString(parentStrings[0]);
+                                loginStrings[1] = jsonObject.getString(parentStrings[1]);
+                                loginStrings[2] = jsonObject.getString(parentStrings[2]);
+                                loginStrings[3] = jsonObject.getString(parentStrings[3]);
+                                loginStrings[4] = jsonObject.getString(parentStrings[4]);
+                                loginStrings[5] = jsonObject.getString(parentStrings[5]);
+                                loginStrings[6] = jsonObject.getString(parentStrings[6]);
+
+                                break;
+
+                            case 1:  //เป็นครูประจำรถ
+
+                                loginStrings[0] = jsonObject.getString(teacherStrings[0]);
+                                loginStrings[1] = jsonObject.getString(teacherStrings[1]);
+                                loginStrings[2] = jsonObject.getString(teacherStrings[2]);
+                                loginStrings[3] = jsonObject.getString(teacherStrings[3]);
+                                loginStrings[4] = jsonObject.getString(teacherStrings[4]);
+                                loginStrings[5] = jsonObject.getString(teacherStrings[5]);
+                                loginStrings[6] = jsonObject.getString(teacherStrings[6]);
+
+                                break;
+
+                        }
+
                     }//if
                 }//for
 
@@ -109,6 +146,29 @@ public class MainActivity extends AppCompatActivity {
                 else if (myPasswordString.equals(truePasswordString)) {
                     //Password True
                     Toast.makeText(context, "Welcome", Toast.LENGTH_SHORT).show();
+
+                //รับค่าจาก switch case ข้างบนโยนไปหน้าต่อไปที่ต้องการ
+                    switch (myModechoiceAnInt) {
+
+                        case 0: //ผู้ปกครอง
+
+                            Intent intent = new Intent(MainActivity.this, ParentUI.class);
+                            intent.putExtra("Login", loginStrings);
+                            startActivity(intent);
+                            finish();
+
+                            break;
+
+                        case 1: //ครูประจำรถ
+
+                            Intent intent1 = new Intent(MainActivity.this, TeacherUI.class);
+                            intent1.putExtra("Login", loginStrings);
+                            startActivity(intent1);
+                            finish();
+
+                            break;
+
+                    }//switch เช็คคา
 
                 } else {
                     //Password False
