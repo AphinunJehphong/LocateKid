@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.jibble.simpleftp.SimpleFTP;
+
+import java.io.File;
 
 
 public class TeacherUI extends AppCompatActivity implements View.OnClickListener {
@@ -108,20 +114,48 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         if ((requestCode == 1) && (resultCode == RESULT_OK)) {
 
             Log.d("15SepV1", "Choose Image OK");
+
             //get path image
             Uri uri = data.getData();
             imagePathString = myFindPathOfImage(uri);
 
             Log.d("15SepV1", "imagePathString ==> " + imagePathString);
+
             //Get ชื่อรูปภาพที่ได้มา
             imageNameString = imagePathString.substring(imagePathString.lastIndexOf("/") + 1);
 
             Log.d("15SepV1", "imageNameString ==> " + imageNameString);
 
+            uploadImageToServer(imagePathString);
 
         }   // if
 
     }   // onActivityResult
+
+    private void uploadImageToServer() {
+
+        StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy
+                .Builder().permitAll().build();
+        StrictMode.setThreadPolicy(threadPolicy); //ช่วยทำให้การอัพโหลดรูปได้
+
+        try {
+
+            SimpleFTP simpleFTP = new SimpleFTP();
+            simpleFTP.connect("ftp.swiftcodingthai.com",
+                  21, "golf1@swiftcodingthai.com", "Abc12345");
+            simpleFTP.bin(); //แปลงเป็น binary โยนไปดัง database
+            simpleFTP.cwd("Image");
+            simpleFTP.stor(new File(imagePathString));
+            simpleFTP.disconnect();
+
+            Toast.makeText(this, "Upload " + imagePathString + "finish",
+                    Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Log.d("15SepV1", "e ==> " + e.toString());
+        }
+
+    }// method อัพรูปขึ้น server
 
     private String myFindPathOfImage(Uri uri) {
 
