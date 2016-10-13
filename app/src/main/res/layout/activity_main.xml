@@ -8,7 +8,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cpe.spu.locatekid.MainActivity"
-    android:background="@drawable/bg27">
+    android:background="@drawable/wallpapers_a_01"
+    tools:background="@drawable/wallpapers_a_01">
 
     <LinearLayout
         android:orientation="vertical"
@@ -24,7 +25,8 @@
             android:layout_width="@dimen/icon"
             android:layout_height="@dimen/icon"
             android:id="@+id/imageView"
-            android:src="@drawable/logonofill" />
+            android:src="@drawable/logos"
+            android:contentDescription="" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,7 +45,8 @@
             android:hint="Username :"
             android:inputType="text"
             android:textColor="@color/text"
-            android:textColorHint="@color/text" />
+            android:textColorHint="@color/text"
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:layout_width="match_parent"
@@ -52,7 +55,8 @@
             android:hint="Password :"
             android:inputType="textPassword"
             android:textColor="@color/text"
-            android:textColorHint="@color/text" />
+            android:textColorHint="@color/text"
+            tools:ignore="HardcodedText" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -63,7 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mode"
+                android:text="@string/mode"
                 android:id="@+id/textView2"
                 android:textSize="@dimen/headline2"
                 android:textStyle="bold"
@@ -73,7 +77,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/choiceMode"
-                android:layout_marginLeft="20dp">
+                android:layout_marginLeft="20dp"
+                tools:ignore="RtlHardcoded">
 
                 <RadioButton
                     android:layout_width="wrap_content"
@@ -102,5 +107,6 @@
         android:layout_alignParentBottom="true"
         android:textColor="@color/text"
         android:textColorHint="@color/text"
-        android:onClick="clickButton" />
+        android:onClick="clickButton"
+        tools:ignore="HardcodedText" />
 </RelativeLayout>

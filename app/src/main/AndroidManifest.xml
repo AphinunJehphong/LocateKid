@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".TeacherUI" />
-        <activity android:name=".ParentUI"></activity>
+        <activity android:name=".ParentUI" />
+        <activity android:name=".Listcheckstu_parentActivity"></activity>
     </application>
 
 </manifest>
