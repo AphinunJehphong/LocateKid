@@ -215,6 +215,15 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         private static final String urlJSON = "http://swiftcodingthai.com/golf1/get_student.php";
         private String ID_ParentString;
         private boolean aBoolean = true;
+        private String[] studentStrings;
+        private String[] columnStudent = new String[]{
+                "ID_Student",
+                "Name_Student",
+                "Sur_Student",
+                "Class_Student",
+                "Address_Student",
+                "Pic_Student",
+                "ID_Parent"};
 
         public SyncStudent(Context context) {
             this.context = context;
@@ -249,13 +258,21 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
             try {
 
                 JSONArray jsonArray = new JSONArray(s);
+                studentStrings = new String[columnStudent.length];
+
                 for (int i=0;i<jsonArray.length();i++) {
 
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    if (ID_ParentString.equals(jsonObject.getString("ID_Parent"))) {
-
+                    if (ID_ParentString.equals(jsonObject.getString(columnStudent[6]))) {
+                        Log.d("14OctV2", "ID_ParentString OK");
                         aBoolean = false;
+                        for (int i1 = 0; i1 < columnStudent.length; i1++) {
+
+                            studentStrings[i1] = jsonObject.getString(columnStudent[i1]);
+                            Log.d("14OctV2", "studentString(" + i1 + ") = " + studentStrings[i1]);
+
+                        }
 
                     } //if
 
