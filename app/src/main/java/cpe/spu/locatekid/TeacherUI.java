@@ -67,6 +67,12 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
     TextView message;
     Button btnWrite;
 
+    //Display
+    private TextView namestuTextView, surstuTextView, classTextView, addressTextView;
+    private ImageView studentImageView;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +84,12 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         phoneTextView = (TextView) findViewById(R.id.textView10);
         avatarImageView = (ImageView) findViewById(R.id.imageView3);
         buttonexit = (Button) findViewById(R.id.button8);
+        namestuTextView = (TextView) findViewById(R.id.textView12);
+        surstuTextView = (TextView) findViewById(R.id.textView13);
+        classTextView = (TextView) findViewById(R.id.textView14);
+        addressTextView = (TextView) findViewById(R.id.textView15);
+        studentImageView = (ImageView) findViewById(R.id.imageView4);
+
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(TeacherUI.this);
 
@@ -282,7 +294,17 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
                 } else {
                     //ถ้าหาเจอ TAG
                     Log.d("14OctV1", "Tag " + ID_ParentString + " OK");
-                }
+
+                    namestuTextView.setText("ชื่อ : "+ studentStrings[1]);
+                    surstuTextView.setText("สกุล : "+ studentStrings[2]);
+                    classTextView.setText("ชั้นเรียน : "+ studentStrings[3]);
+                    addressTextView.setText("ที่อยู่ : "+ studentStrings[4]);
+
+                    Picasso.with(context)
+                            .load(studentStrings[5])
+                            .into(studentImageView);
+
+                }//if
 
 
 

@@ -50,15 +50,7 @@
                             android:text="TextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView15"
-                            android:textSize="@dimen/headline2"
-                            android:textColor="@color/text" />
-
-                        <TextView
-                            android:text="TextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/textView14"
+                            android:id="@+id/textView12"
                             android:textSize="@dimen/headline2"
                             android:textColor="@color/text" />
 
@@ -74,7 +66,15 @@
                             android:text="TextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView12"
+                            android:id="@+id/textView14"
+                            android:textSize="@dimen/headline2"
+                            android:textColor="@color/text" />
+
+                        <TextView
+                            android:text="TextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView15"
                             android:textSize="@dimen/headline2"
                             android:textColor="@color/text" />
                     </LinearLayout>
