@@ -41,6 +41,7 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
     private static final String urlPHP = "http://swiftcodingthai.com/golf1/edit_image_parent.php";
     Button buttonexit;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
