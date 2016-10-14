@@ -64,7 +64,6 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
     Tag myTag;
     Context context;
 
-    TextView tvNFCContent;
     TextView message;
     Button btnWrite;
 
@@ -112,7 +111,6 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
         context = this;
 
-        tvNFCContent = (TextView) findViewById(R.id.nfc_contents);
         message = (TextView) findViewById(R.id.edit_message);
         btnWrite = (Button) findViewById(R.id.button);
 
@@ -197,8 +195,6 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
         showDetailStudent(strTagNFC);
 
-
-        tvNFCContent.setText("NFC Content: " + strTagNFC);
     }
 
     private void showDetailStudent(String strTagNFC) {
@@ -281,7 +277,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
                 if (aBoolean) {
                     //ถ้าหาไม่เจอ TAG ที่กระทำ
                     Alert alert = new Alert();
-                    alert.myDialog(context, "ไม่มี TAG ข้อมูลในนี้ในระบบ", "ไม่มี" + ID_ParentString + "ในระบบของเรา");
+                    alert.myDialog(context, "ไม่มี TAG ข้อมูลในนี้ในระบบ", "ไม่มี " + ID_ParentString + " ในระบบของเรา");
 
                 } else {
                     //ถ้าหาเจอ TAG
