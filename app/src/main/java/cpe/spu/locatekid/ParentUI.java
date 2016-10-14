@@ -39,7 +39,7 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
     private String[] loginStrings;
     private String imagePathString, imageNameString;
     private static final String urlPHP = "http://swiftcodingthai.com/golf1/edit_image_parent.php";
-    Button buttonexit;
+    private Button buttonexit;
 
 
     @Override

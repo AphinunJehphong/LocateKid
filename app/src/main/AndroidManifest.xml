@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.NFC" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +21,6 @@
         </activity>
         <activity android:name=".TeacherUI" />
         <activity android:name=".ParentUI" />
-        <activity android:name=".Listcheckstu_parentActivity"></activity>
     </application>
 
 </manifest>
