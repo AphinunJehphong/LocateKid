@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +43,9 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class TeacherUI extends AppCompatActivity implements View.OnClickListener {
@@ -48,7 +53,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
     //ประกาศตัวแปร
     private TextView nameTextView, surnameTextView, phoneTextView;
     private ImageView avatarImageView;
-    private String[] loginStrings;
+    private String[] loginStrings, myStudentStrings;
     private String imagePathString, imageNameString;
     private static final String urlPHP = "http://swiftcodingthai.com/golf1/edit_image_teacher.php";
     private Button buttonexit;
@@ -64,13 +69,17 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
     Tag myTag;
     Context context;
 
-    TextView message;
-    Button btnWrite;
+    private TextView message;
+    private Button btnWrite;
 
-    //Display
+    //Display เด็กนักเรียน
     private TextView namestuTextView, surstuTextView, classTextView, addressTextView;
     private ImageView studentImageView;
 
+    //For check student
+    private RadioGroup radioGroup;
+    private RadioButton inRadioButton, outRadioButton;
+    private String currentDateString;
 
 
     @Override
@@ -84,13 +93,38 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         phoneTextView = (TextView) findViewById(R.id.textView10);
         avatarImageView = (ImageView) findViewById(R.id.imageView3);
         buttonexit = (Button) findViewById(R.id.button8);
-        namestuTextView = (TextView) findViewById(R.id.textView12);
-        surstuTextView = (TextView) findViewById(R.id.textView13);
-        classTextView = (TextView) findViewById(R.id.textView14);
-        addressTextView = (TextView) findViewById(R.id.textView15);
+        namestuTextView = (TextView) findViewById(R.id.textView11);
+        surstuTextView = (TextView) findViewById(R.id.textView12);
+        classTextView = (TextView) findViewById(R.id.textView13);
+        addressTextView = (TextView) findViewById(R.id.textView14);
         studentImageView = (ImageView) findViewById(R.id.imageView4);
+        radioGroup = (RadioGroup) findViewById(R.id.ragCheck);
+        inRadioButton = (RadioButton) findViewById(R.id.radioButton3);
+        outRadioButton = (RadioButton) findViewById(R.id.radioButton4);
+
+        //Check Student
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                switch (i) {
+
+                    case R.id.radioButton3: //ขึ้นรถ
+                        myAlertCheck(1);
+                        break;
+                    case R.id.radioButton4: //ลงรถ
+                        myAlertCheck(0);
+                        break;
+                }//switch
 
 
+
+            }// onCheck
+        });
+
+
+
+        //ประกาศใช้ adapter ในหน้านี้
         nfcAdapter = NfcAdapter.getDefaultAdapter(TeacherUI.this);
 
         //get ค่าจาก intent ที่แล้วมาใช้
@@ -119,7 +153,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
             }
         });
 
-        //NFC
+        //NFC mode
 
         context = this;
 
@@ -163,9 +197,71 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
 
 
-
-
     }   // Main Method
+
+    private void myAlertCheck(final int index) {
+
+        Log.d("21OctV1", "i == " + index); //เช็คค่าจากปุ่ม radio ที่ได้มา ตาม swift บรรทัดที่ 104
+
+        String[] strings = new String[]{"นักเรียนลงรถ","นักเรียนขึ้นรถ"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(TeacherUI.this);
+        builder.setCancelable(false);
+        builder.setIcon(R.drawable.rat48);
+        builder.setTitle("จะทำการใด ?");
+        builder.setMessage(strings[index]);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                updateJoblist(index);
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+
+    } // myAlertCheck
+
+    private void updateJoblist(int i) {
+
+        //ถ้ามีค่าเท่ากับ 1 ทำการสร้าง record เข้า database , ถ้าเป็น 0 จะทำการแก้ไข่ record โดยการ where ละให้ครบใน database
+
+        switch (i) {
+
+            case 0: //ถ้าเป็น 0 จะทำการแก้ไข่ record โดยการ where ละให้ครบใน database
+                break;
+            case 1: //ถ้ามีค่าเท่ากับ 1 ทำการสร้าง record เข้า database
+                createTimeRecord();
+
+
+                break;
+        } //switch
+
+    } //updateJoblist
+
+    private void createTimeRecord() {
+
+        String strURL = "http://swiftcodingthai.com/golf1/add_time_student.php";
+
+        //get date
+        Calendar calendar = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); // วดป
+        DateFormat dateFormat1 = new SimpleDateFormat("HH:mm"); // ชั่วโมง นาที
+        currentDateString = dateFormat.format(calendar.getTime());
+        String strTimeIn = dateFormat1.format(calendar.getTime());
+        Log.d("21OctV1", "currentDateString ==> " + currentDateString);
+        Log.d("21OctV1", "strTimeIn ==> " + strTimeIn);
+
+        //Get ID_Student
+        String strIDstudent = myStudentStrings[0];
+        Log.d("21OctV1", "strIDstudent ==> " + strIDstudent);
+
+    } //createTimeRecord
 
     /******************************************************************************
      **********************************Read From NFC Tag***************************
@@ -267,6 +363,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
                 JSONArray jsonArray = new JSONArray(s);
                 studentStrings = new String[columnStudent.length];
+                myStudentStrings = new String[columnStudent.length];
 
                 for (int i=0;i<jsonArray.length();i++) {
 
@@ -280,6 +377,8 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
                             studentStrings[i1] = jsonObject.getString(columnStudent[i1]);
                             Log.d("14OctV2", "studentString(" + i1 + ") = " + studentStrings[i1]);
 
+                            myStudentStrings[i1] = studentStrings[i1];
+
                         }
 
                     } //if
@@ -287,7 +386,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
                 }//for
 
                 if (aBoolean) {
-                    //ถ้าหาไม่เจอ TAG ที่กระทำ
+                    //ถ้าหาขอมูลใน TAG ที่กระทำไม่อ
                     Alert alert = new Alert();
                     alert.myDialog(context, "ไม่มี TAG ข้อมูลในนี้ในระบบ", "ไม่มี " + ID_ParentString + " ในระบบของเรา");
 
@@ -302,7 +401,10 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
                     Picasso.with(context)
                             .load(studentStrings[5])
+                            .resize(120, 150)
                             .into(studentImageView);
+
+                    radioGroup.clearCheck();
 
                 }//if
 

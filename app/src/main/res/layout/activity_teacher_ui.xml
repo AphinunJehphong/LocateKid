@@ -4,105 +4,126 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cpe.spu.locatekid.TeacherUI"
     android:background="@drawable/bg7">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:id="@+id/linWrite"
+        android:layout_above="@+id/button8">
+
+        <EditText
+            android:id="@+id/edit_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="message" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Write" />
+
+    </LinearLayout>
+
     <RelativeLayout
-        android:orientation="vertical"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="225dp"
-        android:layout_marginBottom="45dp">
+        android:layout_marginBottom="45dp"
+        android:layout_above="@+id/linWrite">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
+            android:orientation="vertical"
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:gravity="top">
 
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/icon_height"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
 
                     <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/icon"
+                        android:layout_height="@dimen/icon_height"
                         app:srcCompat="@drawable/no_image"
                         android:id="@+id/imageView4"
                         android:layout_weight="1" />
 
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:padding="15dp">
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/ragCheck">
 
-                        <TextView
-                            android:text="TextView"
-                            android:layout_width="match_parent"
+                        <RadioButton
+                            android:text="In car"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView12"
-                            android:textSize="@dimen/headline2"
-                            android:textColor="@color/text" />
+                            android:id="@+id/radioButton3"
+                            android:layout_weight="1" />
 
-                        <TextView
-                            android:text="TextView"
-                            android:layout_width="match_parent"
+                        <RadioButton
+                            android:text="Out car"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView13"
-                            android:textSize="@dimen/headline2"
-                            android:textColor="@color/text" />
+                            android:id="@+id/radioButton4"
+                            android:layout_weight="1" />
 
-                        <TextView
-                            android:text="TextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/textView14"
-                            android:textSize="@dimen/headline2"
-                            android:textColor="@color/text" />
+                    </RadioGroup>
+                </LinearLayout>
 
-                        <TextView
-                            android:text="TextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/textView15"
-                            android:textSize="@dimen/headline2"
-                            android:textColor="@color/text" />
-                    </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp">
+
+                    <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView11"
+                        android:textSize="@dimen/headline2"
+                        android:textColor="@android:color/background_light" />
+
+                    <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView12"
+                        android:textSize="@dimen/headline2"
+                        android:textColor="@android:color/background_light" />
+
+                    <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView13"
+                        android:textSize="@dimen/headline2"
+                        android:textColor="@android:color/background_light" />
+
+                    <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView14"
+                        android:textSize="@dimen/headline2"
+                        android:textColor="@android:color/background_light" />
                 </LinearLayout>
             </LinearLayout>
-        </ScrollView>
-
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/linWrite"
-            android:layout_above="@+id/linWrite">
-
-            <EditText
-                android:id="@+id/edit_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:hint="message" />
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Write" />
         </LinearLayout>
 
 
@@ -178,7 +199,18 @@
         android:onClick="clickButton"
         tools:ignore="HardcodedText"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linWrite"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="32dp"
+        android:layout_marginEnd="32dp"
+        android:id="@+id/button4" />
 
 </RelativeLayout>
