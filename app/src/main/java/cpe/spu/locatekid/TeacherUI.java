@@ -219,7 +219,8 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                updateJoblist(index);
+                //ถ้ามีค่าเท่ากับ 1 ทำการสร้าง record เข้า database , ถ้าเป็น 0 จะทำการแก้ไข่ record โดยการ where ละให้ครบใน database
+                createTimeRecord(index);
                 dialogInterface.dismiss();
             }
         });
@@ -227,41 +228,169 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
     } // myAlertCheck
 
-    private void updateJoblist(int i) {
+    private void createTimeRecord(int i) {
 
-        //ถ้ามีค่าเท่ากับ 1 ทำการสร้าง record เข้า database , ถ้าเป็น 0 จะทำการแก้ไข่ record โดยการ where ละให้ครบใน database
-
-        switch (i) {
-
-            case 0: //ถ้าเป็น 0 จะทำการแก้ไข่ record โดยการ where ละให้ครบใน database
-                break;
-            case 1: //ถ้ามีค่าเท่ากับ 1 ทำการสร้าง record เข้า database
-                createTimeRecord();
-
-
-                break;
-        } //switch
-
-    } //updateJoblist
-
-    private void createTimeRecord() {
-
-        String strURL = "http://swiftcodingthai.com/golf1/add_time_student.php";
+        String strURL = "http://swiftcodingthai.com/golf1/add_time_student_master.php";
+        String strURLedit = "http://swiftcodingthai.com/golf1/edit_time_out_master.php";
 
         //get date
         Calendar calendar = Calendar.getInstance();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); // วดป
         DateFormat dateFormat1 = new SimpleDateFormat("HH:mm"); // ชั่วโมง นาที
         currentDateString = dateFormat.format(calendar.getTime());
-        String strTimeIn = dateFormat1.format(calendar.getTime());
+        String strTime = dateFormat1.format(calendar.getTime());
         Log.d("21OctV1", "currentDateString ==> " + currentDateString);
-        Log.d("21OctV1", "strTimeIn ==> " + strTimeIn);
+        Log.d("21OctV1", "strTime ==> " + strTime);
 
         //Get ID_Student
         String strIDstudent = myStudentStrings[0];
         Log.d("21OctV1", "strIDstudent ==> " + strIDstudent);
 
+        //Get ID_Teacher
+        String strIDteacher = loginStrings[0];
+        Log.d("21OctV1", "strIDteacher ==> " + strIDteacher);
+
+
+        switch (i) {
+            case 0:
+                Log.d("21OctV2", "Edit Process");
+                EditTimeStudent editTimeStudent = new EditTimeStudent(TeacherUI.this,
+                        currentDateString, strTime, strIDstudent);
+                editTimeStudent.execute(strURLedit);
+                break;
+            case 1:
+                AddTimeStudent addTimeStudent = new AddTimeStudent(TeacherUI.this,
+                        currentDateString, strTime, strIDstudent, strIDteacher);
+                addTimeStudent.execute(strURL);
+                break;
+        }
+
     } //createTimeRecord
+
+    private class EditTimeStudent extends AsyncTask<String, Void, String> {
+
+        //ประกาศตัวแปร
+        private Context context;
+        private String dateString, timeString, idStudentString;
+
+        public EditTimeStudent(Context context,
+                               String dateString,
+                               String timeString,
+                               String idStudentString) {
+            this.context = context;
+            this.dateString = dateString;
+            this.timeString = timeString;
+            this.idStudentString = idStudentString;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                RequestBody requestBody = new FormEncodingBuilder()
+                        .add("isAdd", "true")
+                        .add("CurrentDate", dateString)
+                        .add("Time_out", timeString)
+                        .add("ID_Student", idStudentString)
+                        .build();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(strings[0]).post(requestBody).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
+
+            }catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }//doInBack
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d("21OctV2", "Result ==> " + s);
+            String Result = null;
+            if (Boolean.parseBoolean(s)) {
+                Result = "นักเรียนลงรถเรียบร้อยแล้ว";
+
+            } else {
+                Result = "ทำการไม่ถูกต้อง ลองเริ่มใหม่อีกครั้ง";
+            }
+            Toast.makeText(context, Result, Toast.LENGTH_SHORT).show();
+
+        }//onPost
+    }// EditTimestudent เพิ่ม time out เข้าไป
+
+
+
+
+    private class AddTimeStudent extends AsyncTask<String, Void, String> {
+
+       //ประกาศตัวแปร
+        private Context context;
+        private String dateString, timeInString, idStudentString, idTeacherString;
+
+        //สร้าง constuctor
+        public AddTimeStudent(Context context,
+                              String dateString,
+                              String timeInString,
+                              String idStudentString,
+                              String idTeacherString) {
+            this.context = context;
+            this.dateString = dateString;
+            this.timeInString = timeInString;
+            this.idStudentString = idStudentString;
+            this.idTeacherString = idTeacherString;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                RequestBody requestBody = new FormEncodingBuilder()
+                        .add("isAdd" , "true")
+                        .add("Date" , dateString)
+                        .add("Time_in" , timeInString)
+                        .add("ID_Student" , idStudentString)
+                        .add("ID_Teacher" , idTeacherString)
+                        .build();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(strings[0]).post(requestBody).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+        }//doinBack
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d("21OctV1", "Result ==> " + s);
+            String result = null;
+
+            if (Boolean.parseBoolean(s)) {
+                result = "นักเรียนขึ้นรถเรียบร้อยแล้ว";
+
+            } else {
+                result = "ทำการไม่ถูกต้อง ลองเริ่มใหม่อีกครั้ง";
+            }
+
+            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+
+        }//onPost
+
+
+    } // AddTimestu class
 
     /******************************************************************************
      **********************************Read From NFC Tag***************************
