@@ -58,7 +58,7 @@
                     <ImageView
                         android:layout_width="@dimen/icon"
                         android:layout_height="@dimen/icon_height"
-                        app:srcCompat="@drawable/no_image"
+                        android:src="@drawable/no_image"
                         android:id="@+id/imageView4"
                         android:layout_weight="1" />
 
