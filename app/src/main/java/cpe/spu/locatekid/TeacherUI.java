@@ -7,6 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
@@ -15,6 +19,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.MediaStore;
@@ -81,6 +86,12 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
     private RadioButton inRadioButton, outRadioButton;
     private String currentDateString;
 
+    //For Get location teacher
+    private LocationManager locationManager;
+    private Criteria criteria;
+    private double latADouble, lngADouble;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +112,13 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         radioGroup = (RadioGroup) findViewById(R.id.ragCheck);
         inRadioButton = (RadioButton) findViewById(R.id.radioButton3);
         outRadioButton = (RadioButton) findViewById(R.id.radioButton4);
+
+        //Set location
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE); //ขอใช้เซอร์วิส โลเคชั่นทีอยู่
+        criteria = new Criteria(); //
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false); //ตัดการค้นหาารอ้างอิงจากความเปรียบเทียบลึกสูงของระดับน้ำทะเล หรือ แกน z
 
         //Check Student
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -194,10 +212,137 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
         writeTagFilters = new IntentFilter[] { tagDetected };
 
-
+        //loop
+        myloop();
 
 
     }   // Main Method
+
+    private class EditLocation extends AsyncTask<String, Void, String> {
+
+        //ประกาศตัวแปร
+        private Context context;
+        private String idTeacherString, latString, lngString;
+
+        //constuctor
+        public EditLocation(Context context,
+                            String idTeacherString,
+                            String latString,
+                            String lngString) {
+            this.context = context;
+            this.idTeacherString = idTeacherString;
+            this.latString = latString;
+            this.lngString = lngString;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                RequestBody requestBody = new FormEncodingBuilder()
+                        .add("isAdd", "true")
+                        .add("ID_Teacher", idTeacherString)
+                        .add("Lat", latString)
+                        .add("Lng", lngString)
+                        .build();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(params[0]).post(requestBody).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
+            } catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+
+        }//doInback
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d("21OctV3", "Result ==> " + s);
+        }//onPost
+
+    } //edit Location
+
+    private void myloop() {
+
+        Log.d("21OctV3", "lat ==> " + latADouble);
+        Log.d("21OctV3", "lng ==> " + lngADouble);
+
+        String urlEdit = "http://swiftcodingthai.com/golf1/edit_teacher.php";
+
+        //to do
+        EditLocation editLocation = new EditLocation(TeacherUI.this,
+                loginStrings[0], Double.toString(latADouble), Double.toString(lngADouble));
+        editLocation.execute(urlEdit);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                myloop();
+            }
+        },3000);
+
+    }//myloop ให้วนค่าการสร้างเธดเพื่อโยนค่าไปยัง database
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        locationManager.removeUpdates(locationListener);
+    }//ปิดเซอร์วิสเมื่อไม่ได้ใช้แอพ เพื่อปิด module GPS
+
+    public Location myFindLocation(String strProvider) {
+
+        Location location = null;
+
+        if (locationManager.isProviderEnabled(strProvider)) {
+
+            locationManager.requestLocationUpdates(strProvider, 1000 , 10 , locationListener); // ให้มันหาเซอร์วิสให้หาพิกัดทุก ๆ 1000ms และ ทุก ๆ 10 เมตร ให้ทำการค้นหาเลย
+            location = locationManager.getLastKnownLocation(strProvider); //ได้ค่า lat long แล้ว
+
+        } else {
+            Log.d("21OctV3", "Cannot Find Location");
+        }
+
+        return location;
+    } // การค้นหา GPS จาก Module ในเครื่อง หรือ internet
+
+
+
+
+    public LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+
+            latADouble = location.getLatitude();
+            lngADouble = location.getLongitude();
+
+        } //การ get ค่า location
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {//เปิดการเชื่อมต่อจะทำยังไง
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {//ปิดการเชื่อมต่อจะทำยังไง
+
+        }
+    }; //ถ้ามีการเปลี่ยนแปลง จะจับการเปลี่ยนแปลงตาม เช่น การย้ายตำแหน่งของค่า lat long
+
+
+
 
     private void myAlertCheck(final int index) {
 
@@ -604,7 +749,25 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
     public void onResume(){
         super.onResume();
         WriteModeOn();
-    }
+
+        //For get location
+        locationManager.removeUpdates(locationListener); // เคลียออกเพื่อเริ่มนับใหม่จากการใช้ครั้งต่อไป
+        latADouble = 0;
+        lngADouble = 0;
+
+        Location networkLocation = myFindLocation(LocationManager.NETWORK_PROVIDER); //ให้ค้นหาผ่าน internet ก่อน
+        if (networkLocation != null) {
+            latADouble = networkLocation.getLatitude();
+            lngADouble = networkLocation.getLongitude();
+        }
+
+        Location gpsLocation = myFindLocation(LocationManager.GPS_PROVIDER);//ให้ค้นหาจาก Module GPS
+        if (gpsLocation != null) {
+            latADouble = gpsLocation.getLatitude();
+            lngADouble = gpsLocation.getLongitude();
+        }
+
+    } //onResume
 
 
 
