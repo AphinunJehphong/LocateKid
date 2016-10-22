@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
             SyncAuthen syncAuthen = new SyncAuthen(modeChoice,this, urlPHPStrings[modeChoice]
             ,usernameString , passwordString);
             syncAuthen.execute();
-        } //เงื่อนไขเช็คว่า
+        } //เงื่อนไขเช็คว่า ไม่มีช่องว่างให้ get ค่าได้เลย
 
     } //เมธอดปุ่มล็อคอิน
 } //Class main

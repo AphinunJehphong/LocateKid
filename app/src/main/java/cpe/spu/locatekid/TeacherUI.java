@@ -62,6 +62,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
     private String imagePathString, imageNameString;
     private static final String urlPHP = "http://swiftcodingthai.com/golf1/edit_image_teacher.php";
     private Button buttonexit;
+    private String ID_ParentString;
 
     //ประกาศตัวแปร NFC
     public static final String ERROR_DETECTED = "No NFC tag detected!";
@@ -135,11 +136,8 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
                         break;
                 }//switch
 
-
-
             }// onCheck
         });
-
 
 
         //ประกาศใช้ adapter ในหน้านี้
@@ -346,7 +344,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
     private void myAlertCheck(final int index) {
 
-        Log.d("21OctV1", "i == " + index); //เช็คค่าจากปุ่ม radio ที่ได้มา ตาม swift บรรทัดที่ 104
+        Log.d("21OctV1", "i == " + index); //เช็คค่าจากปุ่ม radio ที่ได้มา ตาม switch บรรทัดที่ 104
 
         String[] strings = new String[]{"นักเรียนลงรถ","นักเรียนขึ้นรถ"};
 
@@ -358,7 +356,8 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
+                dialogInterface.cancel();
+
             }
         });
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -460,7 +459,6 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
             String Result = null;
             if (Boolean.parseBoolean(s)) {
                 Result = "นักเรียนลงรถเรียบร้อยแล้ว";
-
             } else {
                 Result = "ทำการไม่ถูกต้อง ลองเริ่มใหม่อีกครั้ง";
             }
@@ -525,7 +523,6 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
             if (Boolean.parseBoolean(s)) {
                 result = "นักเรียนขึ้นรถเรียบร้อยแล้ว";
-
             } else {
                 result = "ทำการไม่ถูกต้อง ลองเริ่มใหม่อีกครั้ง";
             }
@@ -660,7 +657,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
                 }//for
 
                 if (aBoolean) {
-                    //ถ้าหาขอมูลใน TAG ที่กระทำไม่อ
+                    //ถ้าหาข้อมูลใน TAG ที่กระทำไม่เจอ
                     Alert alert = new Alert();
                     alert.myDialog(context, "ไม่มี TAG ข้อมูลในนี้ในระบบ", "ไม่มี " + ID_ParentString + " ในระบบของเรา");
 
@@ -681,8 +678,6 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
                     radioGroup.clearCheck();
 
                 }//if
-
-
 
             } catch (Exception e) {
                 e.printStackTrace();
