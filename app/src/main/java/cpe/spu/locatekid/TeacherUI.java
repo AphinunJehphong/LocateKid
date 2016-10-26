@@ -61,8 +61,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
     private String[] loginStrings, myStudentStrings;
     private String imagePathString, imageNameString;
     private static final String urlPHP = "http://swiftcodingthai.com/golf1/edit_image_teacher.php";
-    private Button buttonexit;
-    private String ID_ParentString;
+    private Button buttonexit, buttonwritenfc, buttonlist;
 
     //ประกาศตัวแปร NFC
     public static final String ERROR_DETECTED = "No NFC tag detected!";
@@ -105,6 +104,8 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         phoneTextView = (TextView) findViewById(R.id.textView10);
         avatarImageView = (ImageView) findViewById(R.id.imageView3);
         buttonexit = (Button) findViewById(R.id.button8);
+        buttonwritenfc = (Button) findViewById(R.id.button4);
+        buttonlist = (Button) findViewById(R.id.button3);
         namestuTextView = (TextView) findViewById(R.id.textView11);
         surstuTextView = (TextView) findViewById(R.id.textView12);
         classTextView = (TextView) findViewById(R.id.textView13);
@@ -169,33 +170,26 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
             }
         });
 
+        buttonwritenfc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goWrite = new Intent(TeacherUI.this, Writetag.class);
+                startActivity(goWrite);
+            }
+        });
+
+        buttonlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent golist = new Intent(TeacherUI.this, Showliststudent.class);
+                startActivity(golist);
+            }
+        });
+
+
         //NFC mode
 
         context = this;
-
-        message = (TextView) findViewById(R.id.edit_message);
-        btnWrite = (Button) findViewById(R.id.button);
-
-        btnWrite.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if(myTag ==null) {
-                        Toast.makeText(context, ERROR_DETECTED, Toast.LENGTH_LONG).show();
-                    } else {
-                        write(message.getText().toString(), myTag);
-                        Toast.makeText(context, WRITE_SUCCESS, Toast.LENGTH_LONG ).show();
-                    }
-                } catch (IOException e) {
-                    Toast.makeText(context, WRITE_ERROR, Toast.LENGTH_LONG ).show();
-                    e.printStackTrace();
-                } catch (FormatException e) {
-                    Toast.makeText(context, WRITE_ERROR, Toast.LENGTH_LONG ).show();
-                    e.printStackTrace();
-                }
-            }
-        });
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
@@ -344,7 +338,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
     private void myAlertCheck(final int index) {
 
-        Log.d("21OctV1", "i == " + index); //เช็คค่าจากปุ่ม radio ที่ได้มา ตาม switch บรรทัดที่ 104
+        Log.d("21OctV1", "i == " + index); //เช็คค่าจากปุ่ม radio ที่ได้มา ตาม switch บรรทัดที่ 130
 
         String[] strings = new String[]{"นักเรียนลงรถ","นักเรียนขึ้นรถ"};
 
@@ -363,7 +357,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //ถ้ามีค่าเท่ากับ 1 ทำการสร้าง record เข้า database , ถ้าเป็น 0 จะทำการแก้ไข่ record โดยการ where ละให้ครบใน database
+                //ถ้ามีค่าเท่ากับ 1 ทำการสร้าง record เข้า database , ถ้าเป็น 0 จะทำการแก้ไข record โดยการ where ละให้ครบใน database
                 createTimeRecord(index);
                 dialogInterface.dismiss();
             }

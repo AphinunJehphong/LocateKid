@@ -7,29 +7,6 @@
     tools:context="cpe.spu.locatekid.TeacherUI"
     android:background="@drawable/bg7">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="false"
-        android:id="@+id/linWrite"
-        android:layout_above="@+id/button8">
-
-        <EditText
-            android:id="@+id/edit_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:hint="message" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Write" />
-
-    </LinearLayout>
-
     <RelativeLayout
 
         android:layout_width="match_parent"
@@ -41,12 +18,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="228dp"
                 android:gravity="top">
 
                 <LinearLayout
@@ -92,7 +72,6 @@
                     android:padding="15dp">
 
                     <TextView
-                        android:text="TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView11"
@@ -100,7 +79,6 @@
                         android:textColor="@android:color/background_light" />
 
                     <TextView
-                        android:text="TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView12"
@@ -108,7 +86,6 @@
                         android:textColor="@android:color/background_light" />
 
                     <TextView
-                        android:text="TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView13"
@@ -116,7 +93,6 @@
                         android:textColor="@android:color/background_light" />
 
                     <TextView
-                        android:text="TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView14"
@@ -124,7 +100,28 @@
                         android:textColor="@android:color/background_light" />
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
+
+        <Button
+            android:text="List"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="false"
+            android:id="@+id/button3"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp" />
+
+        <Button
+            android:text="WriteTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button4"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="25dp" />
 
 
     </RelativeLayout>
@@ -190,7 +187,6 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Exit"
         android:id="@+id/button8"
@@ -199,18 +195,8 @@
         android:onClick="clickButton"
         tools:ignore="HardcodedText"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentStart="false" />
-
-    <Button
-        android:text="Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linWrite"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="32dp"
-        android:layout_marginEnd="32dp"
-        android:id="@+id/button4" />
+        android:layout_centerHorizontal="true"
+        android:autoText="false"
+        android:layout_width="290dp" />
 
 </RelativeLayout>
