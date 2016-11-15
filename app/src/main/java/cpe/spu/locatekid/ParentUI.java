@@ -66,7 +66,7 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
 
 
         //get ค่าจาก intent ที่แล้วมาใช้
-        loginStrings = getIntent().getStringArrayExtra("Login"); //นำค่าจากหน้าที่แล้วมาจาก putextra
+        loginStrings = getIntent().getStringArrayExtra("Loginparent"); //นำค่าจากหน้าที่แล้วมาจาก putextra
 
         //เช็ค image ว่ารูปมีไหม
         if (loginStrings[4].length() != 0) {
@@ -213,7 +213,7 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
             Log.d("15SepV1", "imagePathString ==> " + imagePathString);
 
             //Get ชื่อรูปภาพที่ได้มา
-            imageNameString = imagePathString.substring(imagePathString.lastIndexOf("/") + 1);
+             imageNameString = imagePathString.substring(imagePathString.lastIndexOf("/") + 1);
 
             Log.d("15SepV1", "imageNameString ==> " + imageNameString);
 

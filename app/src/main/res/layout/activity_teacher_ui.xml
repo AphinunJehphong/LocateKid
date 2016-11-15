@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cpe.spu.locatekid.TeacherUI"
-    android:background="@drawable/bg7">
+    android:background="@drawable/wall11">
 
     <RelativeLayout
 
@@ -18,16 +18,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_height="match_parent"
+            android:layout_height="228dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:weightSum="1">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="228dp"
-                android:gravity="top">
+                android:gravity="top"
+                android:layout_weight="0.30">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -45,22 +47,23 @@
                     <RadioGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2.90"
                         android:id="@+id/ragCheck">
 
                         <RadioButton
-                            android:text="In car"
-                            android:layout_width="wrap_content"
+                            android:text="ขึ้นรถ"
                             android:layout_height="wrap_content"
                             android:id="@+id/radioButton3"
-                            android:layout_weight="1" />
+                            android:layout_width="match_parent"
+                            android:textSize="@dimen/headline2" />
 
                         <RadioButton
-                            android:text="Out car"
-                            android:layout_width="wrap_content"
+                            android:text="ลงรถ"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/radioButton4"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:textSize="@dimen/headline2" />
 
                     </RadioGroup>
                 </LinearLayout>
@@ -70,6 +73,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="15dp">
+
+                    <TextView
+                        android:text="ข้อมูลนักเรียน"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView26"
+                        android:gravity="center_horizontal"
+                        android:textSize="@dimen/headline2" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -104,24 +115,29 @@
         </LinearLayout>
 
         <Button
-            android:text="List"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="false"
-            android:id="@+id/button3"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="25dp" />
-
-        <Button
-            android:text="WriteTag"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button4"
+            android:layout_marginLeft="50dp"
+            android:textColor="@color/text"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="25dp" />
+            android:layout_marginStart="50dp"
+            android:layout_width="130dp"
+            android:text="ตั้งค่า TAG" />
+
+        <Button
+            android:text="รายชื่อนักเรียน"
+            android:layout_height="wrap_content"
+            android:id="@+id/button3"
+            android:layout_marginRight="50dp"
+            android:textColor="@color/text"
+            android:layout_alignBaseline="@+id/button4"
+            android:layout_alignBottom="@+id/button4"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="50dp"
+            android:layout_width="130dp" />
 
 
     </RelativeLayout>
@@ -188,15 +204,13 @@
 
     <Button
         android:layout_height="wrap_content"
-        android:text="Exit"
+        android:text="กลับไปหน้าหลัก"
         android:id="@+id/button8"
-        android:textColor="@color/text"
         android:textColorHint="@color/text"
         android:onClick="clickButton"
         tools:ignore="HardcodedText"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:autoText="false"
         android:layout_width="290dp" />
 
 </RelativeLayout>

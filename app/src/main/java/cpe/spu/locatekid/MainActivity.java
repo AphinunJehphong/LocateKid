@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 if (statusABoolean) {
                     // ผู้ใช้ใส่ไม่ตรงกับที่มีใน database
                     Alert alert = new Alert();
-                    alert.myDialog(context, "ไม่มี User นี้ในระบบ", "ไม่มี"  +  myUserString  +  "ในระบบ หรือ เลือกผิดโหมด");
+                    alert.myDialog(context, "ไม่มี User นี้ในระบบ", "ไม่มี"  + " " + myUserString + " "  +  "ในระบบ หรือ เลือกผิดโหมด");
                 }
                 else if (myPasswordString.equals(truePasswordString)) {
                     //Password True
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                         case 0: //ผู้ปกครอง
 
                             Intent intent = new Intent(MainActivity.this, ParentUI.class);
-                            intent.putExtra("Login", loginStrings);
+                            intent.putExtra("Loginparent", loginStrings);
                             startActivity(intent);
                             finish();
 
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                         case 1: //ครูประจำรถ
 
                             Intent intent1 = new Intent(MainActivity.this, TeacherUI.class);
-                            intent1.putExtra("Login", loginStrings);
+                            intent1.putExtra("Loginteacher", loginStrings);
                             startActivity(intent1);
                             finish();
 
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     //Password False
                     Alert alert = new Alert();
-                    alert.myDialog(context, "Incorrect Password","Please Try Again");
+                    alert.myDialog(context, "รหัสผ่านผิดพลาด","ได้โปรดลองทำการอีกครั้ง");
                 }
 
             }catch (Exception e){

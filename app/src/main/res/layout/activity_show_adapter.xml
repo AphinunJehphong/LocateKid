@@ -12,38 +12,42 @@
     tools:context="cpe.spu.locatekid.ShowAdapter">
 
     <ImageView
-        android:layout_width="@dimen/icon"
-        android:layout_height="@dimen/icon_height"
+        android:layout_width="80dp"
 
         android:id="@+id/imageView5"
-        android:src="@drawable/no_image" />
+        android:src="@drawable/no_image"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView17"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/headline2"
+        android:textColor="@color/text" />
 
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView19"
-        android:layout_marginBottom="21dp"
         android:layout_alignBottom="@+id/imageView5"
         android:layout_alignLeft="@+id/textView18"
-        android:layout_alignStart="@+id/textView18" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:id="@+id/textView17"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignStart="@+id/textView18"
+        android:textSize="@dimen/headline2"
+        android:textColor="@color/text" />
 
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView18"
-        android:layout_above="@+id/textView19"
+        android:layout_marginTop="13dp"
+        android:textSize="@dimen/headline2"
+        android:layout_below="@+id/textView17"
         android:layout_alignLeft="@+id/textView17"
         android:layout_alignStart="@+id/textView17"
-        android:layout_marginBottom="29dp" />
+        android:textColor="@color/text" />
 </RelativeLayout>

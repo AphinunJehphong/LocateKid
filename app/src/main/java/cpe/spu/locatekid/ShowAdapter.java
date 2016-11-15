@@ -16,17 +16,17 @@ public class ShowAdapter extends BaseAdapter {
 
     //ประกาศตัวแปร
     private Context context;
-    private String[] idStuStrings, nameStrings, surStrings, picStrings;
+    private String[] nameStrings, surStrings, classString, picStrings;
 
     public ShowAdapter(Context context,
-                       String[] idStuStrings,
                        String[] nameStrings,
                        String[] surStrings,
+                       String[] classString,
                        String[] picStrings) {
         this.context = context;
-        this.idStuStrings = idStuStrings;
         this.nameStrings = nameStrings;
         this.surStrings = surStrings;
+        this.classString = classString;
         this.picStrings = picStrings;
     }
 
@@ -51,16 +51,16 @@ public class ShowAdapter extends BaseAdapter {
         View view1 = layoutInflater.inflate(R.layout.activity_show_adapter, viewGroup, false);
 
         TextView idStuTextView = (TextView) view1.findViewById(R.id.textView17);
-        idStuTextView.setText(idStuStrings[i]);
+        idStuTextView.setText(nameStrings[i]);
 
         TextView nameTextView = (TextView) view1.findViewById(R.id.textView18);
-        nameTextView.setText(nameStrings[i]);
+        nameTextView.setText(surStrings[i]);
 
-        TextView surTextView = (TextView) view1.findViewById(R.id.textView19);
-        surTextView.setText(surStrings[i]);
+        TextView classTextView = (TextView) view1.findViewById(R.id.textView19);
+        classTextView.setText(classString[i]);
 
         ImageView imageView = (ImageView) view1.findViewById(R.id.imageView5);
-        Picasso.with(context).load(picStrings[i]).resize(120, 150).into(imageView);
+        Picasso.with(context).load(picStrings[i]).resize(80, 100).into(imageView);
 
         return view1;
     }

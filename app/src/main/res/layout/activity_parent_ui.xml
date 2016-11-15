@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,12 +9,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cpe.spu.locatekid.ParentUI"
-    android:background="@drawable/wallpapers_a_02">
+    android:background="@drawable/wall20">
+
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Exit"
+        android:text="กลับไปหน้าหลัก"
         android:id="@+id/button2"
         android:layout_alignParentBottom="true"
         android:textColor="@color/text"
@@ -22,7 +24,7 @@
         tools:ignore="HardcodedText" />
 
     <Button
-        android:text="Map"
+        android:text="ดูการเดินทางของบุตรหลาน"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button2"
@@ -44,7 +46,9 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3">
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:layout_width="@dimen/icon"
@@ -85,6 +89,24 @@
                 android:textColor="@color/text" />
 
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/button6"
+        android:layout_marginTop="220dp"
+        android:layout_marginBottom="120dp">
+
+        <ImageView
+            android:layout_height="100dp"
+            android:id="@+id/imageView8"
+            android:layout_width="80dp"
+            android:src="@drawable/no_image" />
+
     </LinearLayout>
 
 </RelativeLayout>

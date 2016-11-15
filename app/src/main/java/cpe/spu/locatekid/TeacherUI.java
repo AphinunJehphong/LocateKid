@@ -19,10 +19,12 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,6 +53,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.jar.Manifest;
 
 
 public class TeacherUI extends AppCompatActivity implements View.OnClickListener {
@@ -74,8 +77,8 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
     Tag myTag;
     Context context;
 
-    private TextView message;
-    private Button btnWrite;
+    //private TextView message;
+    //private Button btnWrite;
 
     //Display เด็กนักเรียน
     private TextView namestuTextView, surstuTextView, classTextView, addressTextView;
@@ -85,6 +88,8 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
     private RadioGroup radioGroup;
     private RadioButton inRadioButton, outRadioButton;
     private String currentDateString;
+
+
 
     //For Get location teacher
     private LocationManager locationManager;
@@ -145,7 +150,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         nfcAdapter = NfcAdapter.getDefaultAdapter(TeacherUI.this);
 
         //get ค่าจาก intent ที่แล้วมาใช้
-        loginStrings = getIntent().getStringArrayExtra("Login"); //นำค่าจากหน้าที่แล้วมาจาก putextra
+        loginStrings = getIntent().getStringArrayExtra("Loginteacher"); //นำค่าจากหน้าที่แล้วมาจาก putextra
 
         //เช็ค image ว่ารูปมีไหม
         if (loginStrings[4].length() != 0) {
@@ -157,6 +162,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         nameTextView.setText("ชื่อ : " + loginStrings[1]);
         surnameTextView.setText("นามสกุล : " + loginStrings[2]);
         phoneTextView.setText("Phone : " + loginStrings[3]);
+
 
         //Image Controller
         avatarImageView.setOnClickListener(this);
@@ -208,7 +214,10 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         myloop();
 
 
+
     }   // Main Method
+
+
 
     private class EditLocation extends AsyncTask<String, Void, String> {
 
@@ -347,17 +356,17 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         builder.setIcon(R.drawable.rat48);
         builder.setTitle("จะทำการใด ?");
         builder.setMessage(strings[index]);
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
 
             }
         });
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //ถ้ามีค่าเท่ากับ 1 ทำการสร้าง record เข้า database , ถ้าเป็น 0 จะทำการแก้ไข record โดยการ where ละให้ครบใน database
+                //ถ้ามีค่าเท่ากับ 1 ทำการสร้าง record เข้า database , ถ้าเป็น 0 จะทำการแก้ไข record โดยการ where ให้ครบในตอลัมน์ที่มีใน database
                 createTimeRecord(index);
                 dialogInterface.dismiss();
             }
@@ -582,7 +591,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         //ประกาศตัวแปร
         private Context context;
         private static final String urlJSON = "http://swiftcodingthai.com/golf1/get_student.php";
-        private String ID_ParentString;
+        private String ID_StudentString;
         private boolean aBoolean = true;
         private String[] studentStrings;
         private String[] columnStudent = new String[]{
@@ -601,7 +610,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         @Override
         protected String doInBackground(String... strings) {
 
-            ID_ParentString = strings[0];
+            ID_StudentString = strings[0];
 
             try {
 
@@ -623,7 +632,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
             super.onPostExecute(s);
 
             Log.d("14OctV1", "JSON ==> " + s);
-            Log.d("14OctV1", "ID_Parent ==> " + ID_ParentString);
+            Log.d("14OctV1", "ID_Student ==> " + ID_StudentString);
             try {
 
                 JSONArray jsonArray = new JSONArray(s);
@@ -634,8 +643,8 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    if (ID_ParentString.equals(jsonObject.getString(columnStudent[6]))) {
-                        Log.d("14OctV2", "ID_ParentString OK");
+                    if (ID_StudentString.equals(jsonObject.getString(columnStudent[0]))) { //เป็นการเรียกว่าค่าที่เอาออกมาเปรียบเทียบ ID_StudentString ที่ดาต้าเบสในคอลัมน์ที่กำหนดนั้นมาเปรียบเทียบว่ามีหรือไม่
+                        Log.d("14OctV2", "ID_StudentString OK");
                         aBoolean = false;
                         for (int i1 = 0; i1 < columnStudent.length; i1++) {
 
@@ -653,11 +662,11 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
                 if (aBoolean) {
                     //ถ้าหาข้อมูลใน TAG ที่กระทำไม่เจอ
                     Alert alert = new Alert();
-                    alert.myDialog(context, "ไม่มี TAG ข้อมูลในนี้ในระบบ", "ไม่มี " + ID_ParentString + " ในระบบของเรา");
+                    alert.myDialog(context, "ไม่มี TAG ข้อมูลในนี้ในระบบ", "ไม่มี " + ID_StudentString + " ในระบบของเรา");
 
                 } else {
                     //ถ้าหาเจอ TAG
-                    Log.d("14OctV1", "Tag " + ID_ParentString + " OK");
+                    Log.d("14OctV1", "Tag " + ID_StudentString + " OK");
 
                     namestuTextView.setText("ชื่อ : "+ studentStrings[1]);
                     surstuTextView.setText("สกุล : "+ studentStrings[2]);
@@ -666,7 +675,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
                     Picasso.with(context)
                             .load(studentStrings[5])
-                            .resize(120, 150)
+                            .resize(80, 100)
                             .into(studentImageView);
 
                     radioGroup.clearCheck();
@@ -798,7 +807,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
         @Override
         protected String doInBackground(Void... voids) {
-            //เช็คค่าว่าที่ได้จากการโหลดรูปจาก database
+                //เช็คค่าว่าที่ได้จากการโหลดรูปจาก database
             try {
 
                 OkHttpClient okHttpClient = new OkHttpClient();
@@ -923,7 +932,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
             simpleFTP.connect("ftp.swiftcodingthai.com",
                   21, "golf1@swiftcodingthai.com", "Abc12345");
             simpleFTP.bin(); //แปลงเป็น binary โยนไปดัง database
-            simpleFTP.cwd("Image"); //กำหนด directory ที่เก็บรูปไว้
+            simpleFTP.cwd("Picteacher"); //กำหนด directory ที่เก็บรูปไว้
             simpleFTP.stor(new File(imagePathString));
             simpleFTP.disconnect();
 
@@ -963,7 +972,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
                 RequestBody requestBody = new FormEncodingBuilder()
                         .add("isAdd", "true")
                         .add("ID_Teacher", loginStrings[0])
-                        .add("Pic_Teacher", "http://swiftcodingthai.com/golf1/Image/" + imageNameString)
+                        .add("Pic_Teacher", "http://swiftcodingthai.com/golf1/Picteacher/" + imageNameString)
                         .build();
                 Request.Builder builder = new Request.Builder();
                 Request request = builder.url(urlPHP).post(requestBody).build();
@@ -987,7 +996,6 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         }//onPost
 
     }//editPicTeacher คลาสเปลี่ยนรูป
-
 
     private String myFindPathOfImage(Uri uri) {
 

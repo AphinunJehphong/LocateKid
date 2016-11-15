@@ -55,8 +55,12 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".Showliststudent" />
-        <activity android:name=".ShowAdapter"></activity>
+        <activity android:name=".Showliststudent"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ShowAdapter"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DetailStudent"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
