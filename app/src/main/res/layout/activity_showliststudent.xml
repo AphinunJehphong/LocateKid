@@ -19,7 +19,8 @@
         android:id="@+id/textView16"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textSize="@dimen/headline2" />
+        android:textSize="@dimen/headline2"
+        android:textColor="@color/text" />
 
     <LinearLayout
         android:orientation="vertical"

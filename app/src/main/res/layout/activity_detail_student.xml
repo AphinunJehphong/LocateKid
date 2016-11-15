@@ -42,42 +42,6 @@
         android:id="@+id/button5" />
 
     <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView33"
-        android:textColor="@color/text"
-        android:textSize="@dimen/headline2"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/textView32"
-        android:layout_alignLeft="@+id/textView32"
-        android:layout_alignStart="@+id/textView32" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView36"
-        android:textColor="@color/text"
-        android:textSize="@dimen/headline2"
-        android:layout_below="@+id/textView34"
-        android:layout_alignLeft="@+id/textView34"
-        android:layout_alignStart="@+id/textView34"
-        android:layout_marginTop="25dp" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView34"
-        android:textColor="@color/text"
-        android:textSize="@dimen/headline2"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/textView33"
-        android:layout_alignLeft="@+id/textView33"
-        android:layout_alignStart="@+id/textView33" />
-
-    <TextView
         android:text="ข้อมูลของผู้ปกครอง"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -91,14 +55,50 @@
 
     <TextView
         android:text="TextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView32"
         android:textColor="@color/text"
         android:textSize="@dimen/headline2"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="19dp"
         android:layout_below="@+id/textView35"
-        android:layout_toLeftOf="@+id/imageView6"
-        android:layout_toStartOf="@+id/imageView6" />
+        android:layout_toStartOf="@+id/imageView6"
+        android:layout_toLeftOf="@+id/imageView6" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView34"
+        android:textColor="@color/text"
+        android:textSize="@dimen/headline2"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/textView33"
+        android:layout_alignLeft="@+id/textView33"
+        android:layout_alignStart="@+id/textView33" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView36"
+        android:textColor="@color/text"
+        android:textSize="@dimen/headline2"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/textView34"
+        android:layout_alignLeft="@+id/textView34"
+        android:layout_alignStart="@+id/textView34" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView33"
+        android:textColor="@color/text"
+        android:textSize="@dimen/headline2"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/textView32"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
