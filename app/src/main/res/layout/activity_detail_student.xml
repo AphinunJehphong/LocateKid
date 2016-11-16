@@ -55,24 +55,12 @@
 
     <TextView
         android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView32"
-        android:textColor="@color/text"
-        android:textSize="@dimen/headline2"
-        android:layout_marginTop="19dp"
-        android:layout_below="@+id/textView35"
-        android:layout_toStartOf="@+id/imageView6"
-        android:layout_toLeftOf="@+id/imageView6" />
-
-    <TextView
-        android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView34"
         android:textColor="@color/text"
         android:textSize="@dimen/headline2"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/textView33"
         android:layout_alignLeft="@+id/textView33"
         android:layout_alignStart="@+id/textView33" />
@@ -81,13 +69,15 @@
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView36"
+        android:id="@+id/textView32"
         android:textColor="@color/text"
         android:textSize="@dimen/headline2"
-        android:layout_marginTop="26dp"
-        android:layout_below="@+id/textView34"
-        android:layout_alignLeft="@+id/textView34"
-        android:layout_alignStart="@+id/textView34" />
+        android:layout_marginTop="22dp"
+        android:layout_below="@+id/textView35"
+        android:layout_toRightOf="@+id/linearLayout"
+        android:layout_toEndOf="@+id/linearLayout"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp" />
 
     <TextView
         android:text="TextView"
@@ -96,9 +86,9 @@
         android:id="@+id/textView33"
         android:textColor="@color/text"
         android:textSize="@dimen/headline2"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/textView32"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignLeft="@+id/textView32"
+        android:layout_alignStart="@+id/textView32" />
 
 </RelativeLayout>

@@ -42,6 +42,11 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
     private Button buttonexit, mapButton;
 
 
+    //For student Display
+    private TextView namestuTextView, surstuTextView, classTextView, addressTextView;
+    private ImageView studentImageView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +57,11 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
         surnameTextview = (TextView) findViewById(R.id.textView5);
         phoneTextview = (TextView) findViewById(R.id.textView6);
         avatarImageView = (ImageView) findViewById(R.id.imageView2);
+        namestuTextView = (TextView) findViewById(R.id.textView37);
+        surstuTextView = (TextView) findViewById(R.id.textView38);
+        classTextView = (TextView) findViewById(R.id.textView39);
+        addressTextView = (TextView) findViewById(R.id.textView40);
+        studentImageView = (ImageView) findViewById(R.id.imageView11);
         buttonexit = (Button) findViewById(R.id.button2);
         mapButton = (Button) findViewById(R.id.button6);
 
@@ -92,7 +102,117 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
+        getStudent(loginStrings[0]);
+
     }//main method
+
+    private void getStudent(String loginStrings) {
+
+        LoadStudent loadStudent = new LoadStudent(ParentUI.this);
+        loadStudent.execute(loginStrings);
+
+    }
+
+    private class LoadStudent extends AsyncTask<String, Void, String> {
+
+        //ประกาศตัวแปร
+        private Context context;
+        private static final String urlJSONs = "http://swiftcodingthai.com/golf1/get_student.php";
+        private String ID_ParentString;
+        private Boolean aBoolean = true;
+        private String[] studentStrings;
+        private String[] columnStudent = new String[]{
+                "ID_Student",
+                "Name_Student",
+                "Sur_Student",
+                "Class_Student",
+                "Address_Student",
+                "Pic_Student",
+                "ID_Parent"};
+
+        //Constructor
+        public LoadStudent(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            ID_ParentString = strings[0];
+
+            try {
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(urlJSONs).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
+            } catch (Exception e) {
+                Log.d("TestLoadstu", "e doInBack ==> " + e.toString());
+                return null;
+            }
+
+        }//doInBack
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d("TestLoadstu", "JSON ==> " + s);
+            Log.d("TestLoadstu", "ID_Parent ==> " + ID_ParentString);
+
+            try {
+
+                JSONArray jsonArray = new JSONArray(s);
+                studentStrings = new String[columnStudent.length];
+
+                for (int i=0; i < jsonArray.length(); i++) {
+
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    if (ID_ParentString.equals(jsonObject.getString(columnStudent[6]))) {
+                        Log.d("TestLoadstu", "ID_ParentString OK");
+                        aBoolean = false;
+                        for (int i1=0; i1 < columnStudent.length; i1++) {
+
+                            studentStrings[i1] = jsonObject.getString(columnStudent[i1]);
+                            Log.d("TestLoadstu", "studentString(" + i1 + ") = " + columnStudent[i1]);
+
+                        }//for
+
+
+                    }//if
+
+
+                }//for
+
+                if (aBoolean) {
+                    //ถ้าหาข้อมูลไม่เจอ
+                    Alert alert = new Alert();
+                    alert.myDialog(context, "ไม่มีข้อมูลนี้ในระบบ", "ไม่มี " + ID_ParentString + " ในระบบของเรา");
+                } else {
+                    //ถ้าเจอข้อมูล
+                    Log.d("TestLoadstu", "data " + ID_ParentString + " OK");
+
+                    namestuTextView.setText("ชื่อ : "+ studentStrings[1]);
+                    surstuTextView.setText("สกุล : "+ studentStrings[2]);
+                    classTextView.setText("ชั้นเรียน : "+ studentStrings[3]);
+                    addressTextView.setText("ที่อยู่ : "+ studentStrings[4]);
+
+                    Picasso.with(context)
+                            .load(studentStrings[5])
+                            .resize(120, 150)
+                            .into(studentImageView);
+                }//if
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }//onPost
+    }//Loadstudent class
+
 
     private void loadImageAvatar(String id) {
 

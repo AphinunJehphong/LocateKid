@@ -34,7 +34,7 @@ public class DetailStudent extends AppCompatActivity {
         nameTextView = (TextView) findViewById(R.id.textView32);
         surnameTextView = (TextView) findViewById(R.id.textView33);
         phoneTextView = (TextView) findViewById(R.id.textView34);
-        addressTextView = (TextView) findViewById(R.id.textView36);
+        //addressTextView = (TextView) findViewById(R.id.textView36);
         picstuImageView = (ImageView) findViewById(R.id.imageView7);
         picparImageView = (ImageView) findViewById(R.id.imageView6);
 
@@ -156,7 +156,7 @@ public class DetailStudent extends AppCompatActivity {
                     surnameTextView.setText("นามสกุล : " + parentStrings[2]);
                     phoneTextView.setText("เบอร์ติดต่อ : " + parentStrings[3]);
 
-                    Picasso.with(context).load(parentStrings[4]).into(picparImageView);
+                    Picasso.with(context).load(parentStrings[4]).resize(180, 200).into(picparImageView);
 
                 }
 

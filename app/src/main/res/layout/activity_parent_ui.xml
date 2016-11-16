@@ -46,7 +46,7 @@
                         android:layout_width="@dimen/icon"
                         android:layout_height="@dimen/icon_height"
                         android:src="@drawable/no_image"
-                        android:id="@+id/imageView4"
+                        android:id="@+id/imageView11"
                         android:layout_weight="1" />
 
                 </LinearLayout>
