@@ -133,6 +133,7 @@ public class Showliststudent extends AppCompatActivity implements View.OnClickLi
 
                         Intent goDetail = new Intent(Showliststudent.this, DetailStudent.class);
                         goDetail.putExtra("Getpic", idparentStrings);
+                        goDetail.putExtra("GetIDstu", idStrings);
                         startActivity(goDetail);
                     }
                 });

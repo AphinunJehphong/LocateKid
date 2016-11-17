@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if (myPasswordString.equals(truePasswordString)) {
                     //Password True
-                    Toast.makeText(context, "Welcome", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "ยินดีต้อนรับเข้าสู่ระบบ", Toast.LENGTH_LONG).show();
 
                 //รับค่าจาก switch case ข้างบนโยนไปหน้าต่อไปที่ต้องการ
                     switch (myModechoiceAnInt) {

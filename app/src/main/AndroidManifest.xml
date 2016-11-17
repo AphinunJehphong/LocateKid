@@ -33,12 +33,6 @@
         <activity
             android:name=".Writetag"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Listviewstu"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Customadapter"
-            android:screenOrientation="portrait" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -54,7 +48,8 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Showliststudent"
             android:screenOrientation="portrait"/>
         <activity android:name=".ShowAdapter"

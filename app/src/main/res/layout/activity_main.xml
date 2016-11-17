@@ -102,7 +102,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign in"
+        android:text="เข้าสู่ระบบ"
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:textColor="@color/text"

@@ -22,6 +22,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -63,7 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getJob.execute(constantsActivity.getUrlGetPassengerWhereID());*/
 
 
-        showlocation();
+
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -75,85 +76,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     } // Main Method
 
-    private void showlocation() {
-
-        Getlocation getlocation = new Getlocation(MapsActivity.this);
-        getlocation.execute();
-    }
-
-
-    private class Getlocation extends AsyncTask<String, Void, String> {
-
-        //ประกาศตัวแปร
-        private Context context;
-        private static final String urlStuimage = "http://swiftcodingthai.com/golf1/get_latlng_teacher_where_id.php";
-        private String[] teacherStrings;
-        private String[] columnStrings = new String[] {"ID_Teacher", "Name_Teacher", "Sur_Teacher", "Tel_Teacher",
-                "Pic_Teacher", "Username", "Password", "Lat", "Lng"};
-
-
-        public Getlocation(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try {
-
-                OkHttpClient okHttpClient = new OkHttpClient();
-                RequestBody requestBody = new FormEncodingBuilder()
-                        .add("isAdd", "true")
-                        .add("ID_Teacher", teacherStrings[0])
-                        .build();
-                Request.Builder builder = new Request.Builder();
-                Request request = builder.url(strings[0]).post(requestBody).build();
-                Response response = okHttpClient.newCall(request).execute();
-                return response.body().string();
-
-            } catch (Exception e) {
-                Log.d("TestGPS", "e doIN ==> " + e.toString());
-                e.printStackTrace();
-                return null;
-            }
-        }//doInback
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            Log.d("TestGPS", "Result ==> " + s);
-
-            try {
-
-                JSONArray jsonArray = new JSONArray(s);
-                columnStrings = new String[columnStrings.length];
-
-                for (int i=0; i < columnStrings.length; i++) {
-
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    columnStrings[i] = jsonObject.getString(columnStrings[i]);
-                    Log.d("TestGPS", "columnString (" + i + ") ==> " + columnStrings[i]);
-
-                }
-
-
-                Log.d("TestGPS", "lat ==> " + columnStrings[7]);
-                LatLng getLatLng = new LatLng(Double.parseDouble(columnStrings[7]),
-                        Double.parseDouble(columnStrings[8]));
-                mMap.addMarker(new MarkerOptions()
-                        .position(getLatLng)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.van))
-                        .title("Bus"));
 
 
 
-            } catch (Exception e) {
-                Log.d("TestGPS", "e ==> " + e.toString());
-            }
-
-        }//onPost
-    }//Getlocation class
 
 
 

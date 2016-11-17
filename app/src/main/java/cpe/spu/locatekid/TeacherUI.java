@@ -136,9 +136,11 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
                     case R.id.radioButton3: //ขึ้นรถ
                         myAlertCheck(1);
+                        radioGroup.clearCheck();
                         break;
                     case R.id.radioButton4: //ลงรถ
                         myAlertCheck(0);
+                        radioGroup.clearCheck();
                         break;
                 }//switch
 
@@ -161,7 +163,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
         //นำค่าจาก database มาโชว์ตามจุดที่ต้องการ
         nameTextView.setText("ชื่อ : " + loginStrings[1]);
         surnameTextView.setText("นามสกุล : " + loginStrings[2]);
-        phoneTextView.setText("Phone : " + loginStrings[3]);
+        phoneTextView.setText("เบอร์โทร : " + loginStrings[3]);
 
 
         //Image Controller
@@ -349,12 +351,12 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
 
         Log.d("21OctV1", "i == " + index); //เช็คค่าจากปุ่ม radio ที่ได้มา ตาม switch บรรทัดที่ 130
 
-        String[] strings = new String[]{"นักเรียนลงรถ","นักเรียนขึ้นรถ"};
+        String[] strings = new String[]{"นักเรียนจะทำการลงรถ ใช่หรือไม่ ?","นักเรียนจะทำการขึ้นรถ ใช่หรือไม่ ?"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(TeacherUI.this);
         builder.setCancelable(false);
         builder.setIcon(R.drawable.rat48);
-        builder.setTitle("จะทำการใด ?");
+        builder.setTitle("ทำการเช็คการขึ้น-ลงรถนักเรียน");
         builder.setMessage(strings[index]);
         builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
             @Override

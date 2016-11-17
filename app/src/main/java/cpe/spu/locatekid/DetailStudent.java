@@ -1,14 +1,18 @@
 package cpe.spu.locatekid;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.games.internal.constants.RequestStatus;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -19,12 +23,17 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class DetailStudent extends AppCompatActivity {
 
-    private TextView nameTextView, surnameTextView, phoneTextView, addressTextView;
-    private ImageView picstuImageView, picparImageView;;
-    private String[] idStrings, showpicString, showdataStrings;
-
+    private TextView nameTextView, surnameTextView, phoneTextView;
+    private ImageView picparImageView;;
+    private String[] showpicString,myStudentStrings;
+    private String currentDateString;
+    private Button addButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +44,26 @@ public class DetailStudent extends AppCompatActivity {
         surnameTextView = (TextView) findViewById(R.id.textView33);
         phoneTextView = (TextView) findViewById(R.id.textView34);
         //addressTextView = (TextView) findViewById(R.id.textView36);
-        picstuImageView = (ImageView) findViewById(R.id.imageView7);
         picparImageView = (ImageView) findViewById(R.id.imageView6);
-
-
+        addButton = (Button) findViewById(R.id.button7);
 
 
         //get ค่าจาก intent ที่แล้วมาใช้
-        //idStrings = getIntent().getStringArrayExtra("Getcontent");
-        showpicString = getIntent().getStringArrayExtra("Getpic"); //นำค่าจากหน้าที่แล้วมาจาก putextra
+        showpicString = getIntent().getStringArrayExtra("Getpic");//นำค่าจากหน้าที่แล้วมาจาก putextra
+        myStudentStrings = getIntent().getStringArrayExtra("GetIDstu");
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                myAlertgo("บุตรหลานท่านจะทำการลาป่วย/ไม่มาโรงเรียนใช่หรือไม่ ?");
+
+            }
+
+        });
 
 
-
+        //showDetailParent(showpicString[0]);
         /*if (showpicString[5].length() != 0) {
             if ((showpicString.equals(getIntent().getStringArrayExtra("Getpic")))) {
                 for (int i = 0; i < showpicString.length; i++) {
@@ -56,14 +73,129 @@ public class DetailStudent extends AppCompatActivity {
                 }
             }
         }*/
-        if (showpicString[5].length() != 0) {
+       /*if (showpicString[5].length() != 0) {
             getImage(showpicString[0]); //เช็คความยาวของตัวอักษรแล้วเทียบถ้ามีให้ส่งลง
-        }
+        }*/
 
-        showDetailParent(showpicString[0]);
-        //getload();
+
+        showDetailParent(showpicString[0]); //ใน showpicString อาเรย์ที่[0] คือ ID_Parent ที่ 10000 และ
+                                            // ใน showpicString อาเรย์ที่[1] คือ ID_Parent ที่ 10001
+
 
     }//Main Method
+
+    private void myAlertgo(final String strMessage) {
+
+        Log.d("Teststat", "i == " + strMessage); //เช็คค่าจากปุ่ม button ที่ได้มา ตามบรรทัดที่ 58
+
+        String[] strings = new String[]{"บุตรหลานท่านจะทำการลาป่วย/ไม่มาโรงเรียนใช่หรือไม่ ?"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(DetailStudent.this);
+        builder.setCancelable(false);
+        builder.setIcon(R.drawable.rat48);
+        builder.setTitle("ทำการลาป่วย/แจ้งว่าไม่มาโรงเรียน");
+        builder.setMessage(strMessage);
+        builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+
+            }
+        });
+        builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //ถ้ามีค่าเท่ากับ "บุตรหลานท่านจะทำการลาป่วย/ไม่มาโรงเรียนใช่หรือไม่ ?" ทำการสร้าง record เข้า database , ถ้าเป็น 0 จะทำการแก้ไข record โดยการ where ให้ครบในตอลัมน์ที่มีใน database
+                Absent(strMessage);
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+
+    } // myAlertgo
+
+
+    private void Absent(String i) {
+
+        String strURLadd = "http://swiftcodingthai.com/golf1/add_status_student.php";
+
+        //Get date
+        Calendar calendar = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); // วดป
+        currentDateString = dateFormat.format(calendar.getTime());
+        Log.d("Teststat", "currentDateString ==> " + currentDateString);
+
+
+        //Get ID_Student
+        String strIDstudent = myStudentStrings[0];
+        Log.d("Teststat", "strIDstudent ==> " + strIDstudent);
+
+        switch (i) {
+            case "บุตรหลานท่านจะทำการลาป่วย/ไม่มาโรงเรียนใช่หรือไม่ ?":
+                Log.d("Teststat", "Edit Process");
+                AbsentStudent absentStudent = new AbsentStudent(DetailStudent.this,
+                        currentDateString, strIDstudent);
+                absentStudent.execute(strURLadd);
+                break;
+        }
+
+    }//addAbsent class เช็คค่า
+
+    private class AbsentStudent extends AsyncTask<String, Void, String> {
+
+        //ประกาศตัวแปร
+        private Context context;
+        private String dateString, idStudentString;
+
+        //Constructor
+        public AbsentStudent(Context context,
+                                String dateString,
+                                String idStudentString) {
+            this.context = context;
+            this.dateString = dateString;
+            this.idStudentString = idStudentString;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                RequestBody requestBody = new FormEncodingBuilder()
+                        .add("isAdd", "true")
+                        .add("Date", dateString)
+                        .add("ID_Student", idStudentString)
+                        .build();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(strings[0]).post(requestBody).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+
+            }
+
+        }//doInBack
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d("Teststat", "Result ==> " + s);
+            String Result = null;
+            if (Boolean.parseBoolean(s)) {
+                Result = "แจ้งเตือนสำเร็จ";
+            } else {
+                Result = "ทำการไม่ถูกต้อง ลองเริ่มใหม่อีกครั้ง";
+            }
+            Toast.makeText(context, Result, Toast.LENGTH_SHORT).show();
+
+        }//onPost
+    }
 
     private void showDetailParent(String showpicString) {
 
@@ -250,7 +382,7 @@ public class DetailStudent extends AppCompatActivity {
     }//Loadparent class*/
 
 
-    private void getImage(String id) {
+    /*private void getImage(String id) {
 
         Log.d("TestDetail", "Load image at id ==> " + id);
         Loadpicstu loadpicstu = new Loadpicstu(this, id);
@@ -258,7 +390,7 @@ public class DetailStudent extends AppCompatActivity {
 
     }//getImage
 
-    private class Loadpicstu extends AsyncTask<String, Void, String> {
+    /*private class Loadpicstu extends AsyncTask<String, Void, String> {
 
         //ประกาศตัวแปร
         private Context context;
@@ -314,7 +446,7 @@ public class DetailStudent extends AppCompatActivity {
             }
 
         }//onPost
-    }//GetdetailPic class
+    }//GetdetailPic class*/
 
 
 }//Main Class

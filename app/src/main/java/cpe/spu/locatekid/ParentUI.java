@@ -87,7 +87,7 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
         //นำค่าจาก database มาโชว์ตามจุดที่ต้องการ
         nameTextview.setText("ชื่อ : "+ loginStrings[1]);
         surnameTextview.setText("นามสกุล : "+ loginStrings[2]);
-        phoneTextview.setText("Phone : "+ loginStrings[3]);
+        phoneTextview.setText("เบอร์โทร : "+ loginStrings[3]);
 
         //Image controller
         avatarImageView.setOnClickListener(this);
