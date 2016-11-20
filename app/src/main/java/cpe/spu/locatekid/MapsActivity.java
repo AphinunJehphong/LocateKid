@@ -133,6 +133,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             Log.d("TestJoblist", "JSON ==> " + s);
             Log.d("TestJoblist", "ID_Student ==> " + ID_StudentString);
+
             try {
 
                 JSONArray jsonArray = new JSONArray(s);
@@ -158,6 +159,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     Alert alert = new Alert();
                     alert.myDialog(context, "ไม่มี ข้อมูลนี้ในระบบ", "ไม่มี " + ID_StudentString + " ในระบบของเรา");
+                    Toast.makeText(MapsActivity.this,
+                            "รถโรงเรียนยังไม่ทำการใช้งาน หรือ ยังไม่ถึงเวลาที่กำหนด",Toast.LENGTH_LONG).show();
+
 
                 } else {
 
@@ -193,7 +197,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         private Context context;
         private static final String urlTeacher = "http://swiftcodingthai.com/golf1/get_userteacher.php";
         private String ID_TeacherString;
-        private boolean aBoolean = false;
+        private boolean aBoolean = true;
         private String[] teacherStrings;
         private String[] columnTeacher = new String[]{
                 "ID_Teacher",
@@ -245,17 +249,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 JSONArray jsonArray = new JSONArray(s);
                 teacherStrings = new String[columnTeacher.length];
 
-                for (int i = 0; i < columnTeacher.length; i++) {
-                    aBoolean = true;
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    teacherStrings[i] = jsonObject.getString(columnTeacher[i]);
-                    Log.d("TestJoblist", "teacherStrings(" + i + ") ==> " + columnTeacher[i]);
+                for (int i = 0; i < jsonArray.length(); i++) {
 
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    if(ID_TeacherString.equals(jsonObject.getString(columnTeacher[0]))) {
+                        Log.d("TestJoblist", "ID_TeacherString OK");
+                        aBoolean = false;
+                        for (int i1 = 0; i1 < columnTeacher.length; i1++) {
+
+                            teacherStrings[i1] = jsonObject.getString(columnTeacher[i1]);
+                            Log.d("TestJoblist", "teacherStrings(" + i + ") ==> " + columnTeacher[i1]);
+
+                        }
+                    }
                 }
 
-                //Create Marker พิกัดของครูที่อยู่บนรถรับส่งนักเรียนของผู้ปกครองมาแสดงให้ผู้ปกครอง
-                Log.d("TestJoblist", "GPSGO ==> " + teacherStrings[7]);
-                Log.d("TestJoblist", "GPSGO ==> " + teacherStrings[8]);
+                if (aBoolean) {
+
+                    Toast.makeText(MapsActivity.this,
+                            "รถโรงเรียนยังไม่ทำการใช้งาน หรือ ยังไม่ถึงเวลาที่กำหนด",Toast.LENGTH_LONG).show();
+
+                } else {
+                    //Create Marker พิกัดของครูที่อยู่บนรถรับส่งนักเรียนของผู้ปกครองมาแสดงให้ผู้ปกครอง
+                    Log.d("TestJoblist", "GPSGO ==> " + teacherStrings[7]);
+                    Log.d("TestJoblist", "GPSGO ==> " + teacherStrings[8]);
 
                     LatLng getGPS = new LatLng(Double.parseDouble(teacherStrings[7]),
                             Double.parseDouble(teacherStrings[8]));
@@ -267,7 +285,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             .position(getGPS)
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.vans))
                             .title("Bus " + teacherStrings[1]));
-
+                }
 
             } catch (Exception e) {
 
