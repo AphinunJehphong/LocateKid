@@ -62,6 +62,8 @@ public class DetailStudent extends AppCompatActivity {
 
         });
 
+        showDetailParent(showpicString[0]); //ใน showpicString อาเรย์ที่[0] คือ ID_Parent ที่ 10000 และ
+                                            // ใน showpicString อาเรย์ที่[1] คือ ID_Parent ที่ 10001
 
         //showDetailParent(showpicString[0]);
         /*if (showpicString[5].length() != 0) {
@@ -78,8 +80,7 @@ public class DetailStudent extends AppCompatActivity {
         }*/
 
 
-        showDetailParent(showpicString[0]); //ใน showpicString อาเรย์ที่[0] คือ ID_Parent ที่ 10000 และ
-                                            // ใน showpicString อาเรย์ที่[1] คือ ID_Parent ที่ 10001
+
 
 
     }//Main Method

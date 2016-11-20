@@ -39,7 +39,7 @@
         android:layout_alignParentStart="true">
 
         <TextView
-            android:text="14/11/2016"
+            android:text="วันที่"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView23"
@@ -58,7 +58,7 @@
             android:textSize="@dimen/headline2" />
 
         <TextView
-            android:text="Time in : 13:56"
+            android:text="นักเรียนยังไม่ได้ทำการขึ้นรถ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView20"
@@ -66,12 +66,12 @@
             android:textColor="@color/text" />
 
         <TextView
-            android:text="Time Out : 14:35"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView21"
             android:textSize="@dimen/headline2"
-            android:textColor="@color/text" />
+            android:textColor="@color/text"
+            android:text="นักเรียนยังไม่ทำการลงรถ" />
 
         <TextView
             android:text="สถานะการขึ้นรถ"

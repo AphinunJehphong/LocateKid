@@ -36,7 +36,7 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
     //ประกาศตัวแปร
     private TextView nameTextview, surnameTextview, phoneTextview;
     private ImageView avatarImageView;
-    private String[] loginStrings;
+    private String[] loginStrings, myStudentStrings;
     private String imagePathString, imageNameString;
     private static final String urlPHP = "http://swiftcodingthai.com/golf1/edit_image_parent.php";
     private Button buttonexit, mapButton;
@@ -70,6 +70,7 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ParentUI.this, MapsActivity.class);
+                intent.putExtra("GetIDStudent", myStudentStrings);
                 startActivity(intent);
             }
         });
@@ -166,6 +167,7 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
 
                 JSONArray jsonArray = new JSONArray(s);
                 studentStrings = new String[columnStudent.length];
+                myStudentStrings = new String[columnStudent.length];
 
                 for (int i=0; i < jsonArray.length(); i++) {
 
@@ -178,6 +180,8 @@ public class ParentUI extends AppCompatActivity implements View.OnClickListener 
 
                             studentStrings[i1] = jsonObject.getString(columnStudent[i1]);
                             Log.d("TestLoadstu", "studentString(" + i1 + ") = " + columnStudent[i1]);
+
+                            myStudentStrings[i1] = studentStrings[i1];
 
                         }//for
 

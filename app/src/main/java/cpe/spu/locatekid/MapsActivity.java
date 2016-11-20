@@ -33,7 +33,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private ImageView imageView;
-    private String[] teacherStrings;
+    private String[] studentStrings;
     private static final String urlTeacher = "http://swiftcodingthai.com/golf1/get_userteacher.php";
     private LatLng latlng;
 
@@ -62,10 +62,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         constantsActivity = new ConstantsActivity();
         GetJob getJob = new GetJob(MapsActivity.this);
         getJob.execute(constantsActivity.getUrlGetPassengerWhereID());*/
+        //get ค่าจาก intent ที่แล้วมาใช้
+        studentStrings = getIntent().getStringArrayExtra("GetIDStudent"); //นำค่าจากหน้าที่แล้วมาจาก putextra
 
-
-
-
+        getJoblist(studentStrings[0]);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -75,6 +75,214 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     } // Main Method
+
+
+    private void getJoblist(String studentString){
+
+        showJoblist showJoblist = new showJoblist(MapsActivity.this);
+        showJoblist.execute(studentString);
+
+    }//getJoblist class
+
+    private class showJoblist extends AsyncTask<String, Void, String> {
+
+        //ประกาศตัวแปร
+        private Context context;
+        private static final String urlJoblist = "http://swiftcodingthai.com/golf1/get_joblist.php";
+        private String ID_StudentString;
+        private boolean aBoolean = true;
+        private String[] resultStrings;
+        private String[] columnResult = new String[]{
+                "id",
+                "CurrentDate",
+                "Time_in",
+                "Time_out",
+                "ID_Student",
+                "ID_Teacher",
+                "Stat_stu"};
+
+
+        //Constructor
+        public showJoblist(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            ID_StudentString = strings[0];
+
+            try {
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(urlJoblist).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
+            } catch (Exception e) {
+                Log.d("TestJoblist", "e doInBack ==> " + e.toString());
+                return null;
+            }
+
+        }//doInBack
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d("TestJoblist", "JSON ==> " + s);
+            Log.d("TestJoblist", "ID_Student ==> " + ID_StudentString);
+            try {
+
+                JSONArray jsonArray = new JSONArray(s);
+                resultStrings = new String[columnResult.length];
+
+                for (int i=0; i < jsonArray.length(); i++) {
+
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    if (ID_StudentString.equals(jsonObject.getString(columnResult[4]))) {
+                        Log.d("TestJoblist", "ID_StudentString OK");
+                        aBoolean = false;
+                        for (int i1 = 0; i1 < columnResult.length; i1++) {
+
+                            resultStrings[i1] = jsonObject.getString(columnResult[i1]);
+                            Log.d("TestJoblist", "resultStrings(" + i1 + ") = " + columnResult[i1]);
+
+                        }
+                    }
+                }
+
+                if (aBoolean) {
+
+                    Alert alert = new Alert();
+                    alert.myDialog(context, "ไม่มี ข้อมูลนี้ในระบบ", "ไม่มี " + ID_StudentString + " ในระบบของเรา");
+
+                } else {
+
+                    Log.d("TestJoblist", "Result " + ID_StudentString + " OK");
+
+                    dateTextView.setText(resultStrings[1]);
+                    timeinTextView.setText("Time In : " + resultStrings[2]);
+                    timeoutTextView.setText("Time Out : " + resultStrings[3]);
+                }
+
+                //นำค่าที่มีใน class นี้ไปใช้ยังอีกคลาสตามต้องการ
+                getGPS(resultStrings[5]);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }//onPost
+
+    }//ShowJoblist class
+
+    private void getGPS (String resultString) {
+
+        ShowGPS showGPS = new ShowGPS(MapsActivity.this);
+        showGPS.execute(resultString);
+
+    }//getGPS class
+
+
+    private class ShowGPS extends AsyncTask <String, Void, String> {
+
+        //ประกาศตัวแปร
+        private Context context;
+        private static final String urlTeacher = "http://swiftcodingthai.com/golf1/get_userteacher.php";
+        private String ID_TeacherString;
+        private boolean aBoolean = false;
+        private String[] teacherStrings;
+        private String[] columnTeacher = new String[]{
+                "ID_Teacher",
+                "Name_Teacher",
+                "Sur_Teacher",
+                "Tel_Teacher",
+                "Pic_Teacher",
+                "Username",
+                "Password",
+                "Lat",
+                "Lng"};
+
+
+        //Constructor
+        public ShowGPS(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            ID_TeacherString = strings[0];
+
+            try {
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(urlTeacher).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
+
+            } catch (Exception e) {
+                Log.d("TestJoblist", "e doInBack ==> " + e.toString());
+                return null;
+            }
+        }//doInBack
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d("TestJoblist", "JSON ==> " + s);
+            Log.d("TestJoblist", "ID_Teacher ==> " + ID_TeacherString);
+
+            try {
+
+                JSONArray jsonArray = new JSONArray(s);
+                teacherStrings = new String[columnTeacher.length];
+
+                for (int i = 0; i < columnTeacher.length; i++) {
+                    aBoolean = true;
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    teacherStrings[i] = jsonObject.getString(columnTeacher[i]);
+                    Log.d("TestJoblist", "teacherStrings(" + i + ") ==> " + columnTeacher[i]);
+
+                }
+
+                //Create Marker พิกัดของครูที่อยู่บนรถรับส่งนักเรียนของผู้ปกครองมาแสดงให้ผู้ปกครอง
+                Log.d("TestJoblist", "GPSGO ==> " + teacherStrings[7]);
+                Log.d("TestJoblist", "GPSGO ==> " + teacherStrings[8]);
+
+                    LatLng getGPS = new LatLng(Double.parseDouble(teacherStrings[7]),
+                            Double.parseDouble(teacherStrings[8]));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(getGPS));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getGPS, 16));
+
+                    //Create Marker
+                    mMap.addMarker(new MarkerOptions()
+                            .position(getGPS)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.vans))
+                            .title("Bus " + teacherStrings[1]));
+
+
+            } catch (Exception e) {
+
+                 Log.d("TestJoblist", "e ==> " + e.toString());
+                    Toast.makeText(MapsActivity.this,
+                    "ไม่สามารถหาพิกัดได้",Toast.LENGTH_LONG).show();
+
+            }
+
+        }//onPost
+
+
+
+    }//ShowGPS class
+
 
 
 
@@ -99,7 +307,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Log.d("TestGPS", "getLAT ==>" + );
         //Log.d("TestGPS", "getLNG" + );
 
-        try {
+       /* try {
             // Add a marker in Sydney and move the camera
             LatLng SchoolBus = new LatLng(13.8492258,100.5794144);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(SchoolBus));
@@ -116,6 +324,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(MapsActivity.this,
                         "ไม่สามารถหาพิกัดได้",
                         Toast.LENGTH_SHORT).show();
-            }
-    }
+            }*/
+    }//onMapReady class
 }  // main Class
