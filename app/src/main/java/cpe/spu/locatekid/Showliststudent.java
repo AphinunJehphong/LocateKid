@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.squareup.okhttp.OkHttpClient;
@@ -26,7 +27,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import static cpe.spu.locatekid.R.id.imageView;
+
 
 public class Showliststudent extends AppCompatActivity implements View.OnClickListener {
 
@@ -100,13 +101,13 @@ public class Showliststudent extends AppCompatActivity implements View.OnClickLi
 
                 JSONArray jsonArray = new JSONArray(s);
 
-                    final String[] idStrings = new String[jsonArray.length()];
-                    final String[] nameStrings = new String[jsonArray.length()];
-                    final String[] surStrings = new String[jsonArray.length()];
-                    final String[] classStrings = new String[jsonArray.length()];
-                    final String[] addressStrings = new String[jsonArray.length()];
-                    final String[] picStrings = new String[jsonArray.length()];
-                    final String[] idparentStrings = new String[jsonArray.length()];
+                final String[] idStrings = new String[jsonArray.length()];
+                final String[] nameStrings = new String[jsonArray.length()];
+                final String[] surStrings = new String[jsonArray.length()];
+                final String[] classStrings = new String[jsonArray.length()];
+                final String[] addressStrings = new String[jsonArray.length()];
+                final String[] picStrings = new String[jsonArray.length()];
+                final String[] idparentStrings = new String[jsonArray.length()];
 
                 for (int i=0; i<jsonArray.length(); i++) {
 
@@ -127,12 +128,14 @@ public class Showliststudent extends AppCompatActivity implements View.OnClickLi
 
 
                 //Active click Listview
-                myListView.setOnItemClickListener(new OnItemClickListener() {
+                myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
 
                         Intent goDetail = new Intent(Showliststudent.this, DetailStudent.class);
-                        goDetail.putExtra("Getpic", idparentStrings);
+                        int itemPosition  = i;
+                        goDetail.putExtra("Getindex", itemPosition);
+                        goDetail.putExtra("GetIDparent", idparentStrings);
                         goDetail.putExtra("GetIDstu", idStrings);
                         startActivity(goDetail);
                     }

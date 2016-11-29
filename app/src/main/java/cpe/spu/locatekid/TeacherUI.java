@@ -289,7 +289,7 @@ public class TeacherUI extends AppCompatActivity implements View.OnClickListener
             public void run() {
                 myloop();
             }
-        },3000);
+        },1000); //ให้มันวนค่าพิกัด Lat Lng ทุก ๆ 1 วินาที
 
     }//myloop ให้วนค่าการสร้างเธดเพื่อโยนค่าไปยัง database
 

@@ -3,7 +3,9 @@ package cpe.spu.locatekid;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,14 +28,16 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Objects;
 
-public class DetailStudent extends AppCompatActivity {
+public class DetailStudent extends AppCompatActivity implements View.OnClickListener{
 
     private TextView nameTextView, surnameTextView, phoneTextView;
-    private ImageView picparImageView;;
+    private ImageView picparImageView;
     private String[] showpicString,myStudentStrings;
     private String currentDateString;
-    private Button addButton;
+    private Button addButton ,backButton;
+    private int getitemString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +50,26 @@ public class DetailStudent extends AppCompatActivity {
         //addressTextView = (TextView) findViewById(R.id.textView36);
         picparImageView = (ImageView) findViewById(R.id.imageView6);
         addButton = (Button) findViewById(R.id.button7);
+        //backButton = (Button) findViewById(R.id.button5);
 
 
         //get ค่าจาก intent ที่แล้วมาใช้
-        showpicString = getIntent().getStringArrayExtra("Getpic");//นำค่าจากหน้าที่แล้วมาจาก putextra
+        showpicString = getIntent().getStringArrayExtra("GetIDparent");//นำค่าจากหน้าที่แล้วมาจาก putextra
         myStudentStrings = getIntent().getStringArrayExtra("GetIDstu");
+        getitemString = getIntent().getIntExtra("Getindex",getitemString);
+
+
+
+        /*
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent golist = new Intent(DetailStudent.this, Showliststudent.class);
+                startActivity(golist);
+
+            }
+        });*/
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,15 +81,47 @@ public class DetailStudent extends AppCompatActivity {
 
         });
 
-        showDetailParent(showpicString[0]); //ใน showpicString อาเรย์ที่[0] คือ ID_Parent ที่ 10000 และ
-                                            // ใน showpicString อาเรย์ที่[1] คือ ID_Parent ที่ 10001
 
-        //showDetailParent(showpicString[0]);
-        /*if (showpicString[5].length() != 0) {
-            if ((showpicString.equals(getIntent().getStringArrayExtra("Getpic")))) {
+
+
+
+
+
+    /*for (int i = 0; i < showpicString.length; i++) {
+        switch (showpicString[i]) {
+
+            case "10000":
+                showDetailParent(showpicString[i]);
+                break;
+            case "10001":
+                showDetailParent(showpicString[i]);
+                break;
+            case "10002":
+                showDetailParent(showpicString[i]);
+                break;
+            case "10003":
+                showDetailParent(showpicString[i]);
+                break;
+            case "10004":
+                showDetailParent(showpicString[i]);
+                break;
+            case "10005":
+                showDetailParent(showpicString[i]);
+                break;
+        }
+    }*/
+
+
+        //showDetailParent(showpicString[0]); //ใน showpicString อาเรย์ที่[0] คือ ID_Parent ที่ 10000 และ
+        // ใน showpicString อาเรย์ที่[1] คือ ID_Parent ที่ 10001
+
+        showDetailParent(showpicString[getitemString]);
+        /*if (showpicString[0].length() != 0) {
+
+            if ((showpicString.equals(getIntent().getStringArrayExtra("GetIDparent")))) {
                 for (int i = 0; i < showpicString.length; i++) {
 
-                    getImage(showpicString[i]);
+                    showDetailParent(showpicString[i]);
 
                 }
             }
@@ -142,6 +193,11 @@ public class DetailStudent extends AppCompatActivity {
 
     }//addAbsent class เช็คค่า
 
+    @Override
+    public void onClick(View v) {
+        finish();
+    }//onclick
+
     private class AbsentStudent extends AsyncTask<String, Void, String> {
 
         //ประกาศตัวแปร
@@ -150,8 +206,8 @@ public class DetailStudent extends AppCompatActivity {
 
         //Constructor
         public AbsentStudent(Context context,
-                                String dateString,
-                                String idStudentString) {
+                             String dateString,
+                             String idStudentString) {
             this.context = context;
             this.dateString = dateString;
             this.idStudentString = idStudentString;
@@ -299,155 +355,5 @@ public class DetailStudent extends AppCompatActivity {
             }
         }//onPost
     }//Showparent Method
-
-
-
-   /*private void getload() {
-
-        Loadparent loadparent = new Loadparent(this, urlparent);
-        loadparent.execute();
-
-    }
-
-    private class Loadparent extends AsyncTask<Void, Void, String> {
-
-        //ประกาศตัวแปร
-        private Context context;
-        private String urlparent;
-
-        //Constructor
-
-
-        public Loadparent(Context context, String urlparent) {
-            this.context = context;
-            this.urlparent = urlparent;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-
-            try {
-
-                OkHttpClient okHttpClient = new OkHttpClient();
-                Request.Builder builder = new Request.Builder();
-                Request request = builder.url(urlparent).build();
-                Response response = okHttpClient.newCall(request).execute();
-                return response.body().string();
-
-
-            } catch (Exception e) {
-                Log.d("TestDetail", "e doInBack ==> " + e.toString());
-                return null;
-            }
-        }//doInback
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            Log.d("TestDetail", "JSON ==> " + s);
-
-            try {
-
-                JSONArray jsonArray = new JSONArray(s);
-                final String[] idStrings = new String[jsonArray.length()];
-                final String[] nameStrings = new String[jsonArray.length()];
-                final String[] surStrings = new String[jsonArray.length()];
-                final String[] telStrings = new String[jsonArray.length()];
-                final String[] picStrings = new String[jsonArray.length()];
-
-                for(int i=0; i < jsonArray.length(); i++) {
-
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    idStrings[i] = jsonObject.getString("ID_Parent");
-                    nameStrings[i] = jsonObject.getString("Name_Parent");
-                    surStrings[i] = jsonObject.getString("Sur_Parent");
-                    telStrings[i] = jsonObject.getString("Tel_Parent");
-                    picStrings[i] = jsonObject.getString("Pic_Student");
-
-                    nameTextView.setText("ชื่อ : "+ nameStrings[i]);
-                    surnameTextView.setText("สกุล : "+ surStrings[i]);
-                    phoneTextView.setText("เบอร์โทร : "+ telStrings[i]);
-                    Picasso.with(context)
-                            .load(picStrings[i])
-                            .resize(80, 100)
-                            .into(picparImageView);
-                }
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }//onPost
-    }//Loadparent class*/
-
-
-    /*private void getImage(String id) {
-
-        Log.d("TestDetail", "Load image at id ==> " + id);
-        Loadpicstu loadpicstu = new Loadpicstu(this, id);
-        loadpicstu.execute();
-
-    }//getImage
-
-    /*private class Loadpicstu extends AsyncTask<String, Void, String> {
-
-        //ประกาศตัวแปร
-        private Context context;
-        private String idString;
-        private String[] ID_StudentStrings;
-        private static final String urlStuimage = "http://swiftcodingthai.com/golf1/get_image_student_where_id.php";
-
-        //Constructor
-        public Loadpicstu(Context context, String idString) {
-            this.context = context;
-            this.idString = idString;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-
-            try {
-
-                OkHttpClient okHttpClient = new OkHttpClient();
-                RequestBody requestBody = new FormEncodingBuilder()
-                        .add("isAdd", "true")
-                        .add("ID_Student", idString)
-                        .build();
-                Request.Builder builder = new Request.Builder();
-                Request request = builder.url(urlStuimage).post(requestBody).build();
-                Response response = okHttpClient.newCall(request).execute();
-                return response.body().string();
-
-            } catch (Exception e) {
-                Log.d("TestDetail", "e doIn ==>" + e.toString());
-                return null;
-            }
-        }//doInback
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            Log.d("TestDetail", "JSON ==> " + s);
-
-            try {
-
-
-                JSONArray jsonArray = new JSONArray(s);
-                JSONObject jsonObject = jsonArray.getJSONObject(0);
-                String strFormURL = jsonObject.getString("Pic_Student");
-                Picasso.with(context).load(strFormURL).resize(120, 150).into(picstuImageView);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }//onPost
-    }//GetdetailPic class*/
-
 
 }//Main Class

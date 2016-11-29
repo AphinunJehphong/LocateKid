@@ -1,15 +1,26 @@
 package cpe.spu.locatekid;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowAnimationFrameStats;
+import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,22 +43,24 @@ import java.util.Map;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private ImageView imageView;
     private String[] studentStrings;
     private static final String urlTeacher = "http://swiftcodingthai.com/golf1/get_userteacher.php";
-    private LatLng latlng;
-
-
-
+    private Button refreshButton;
 
     //Display Job
     private TextView timeinTextView, timeoutTextView, dateTextView;
-    private ImageView statTextView;
+    private ImageView statImageView;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        //Get instant delay refresh
+        //getInstance();
 
         //Widget
         timeinTextView = (TextView) findViewById(R.id.textView20);
@@ -55,26 +68,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dateTextView = (TextView) findViewById(R.id.textView23);
 
 
-        //Imageview
-        imageView = (ImageView) findViewById(R.id.imageView9);
+        refreshButton = (Button) findViewById(R.id.button5);
 
-        /*//Get Value From JSON
-        constantsActivity = new ConstantsActivity();
-        GetJob getJob = new GetJob(MapsActivity.this);
-        getJob.execute(constantsActivity.getUrlGetPassengerWhereID());*/
+
+        //Imageview
+        statImageView = (ImageView) findViewById(R.id.imageView9);
+
         //get ค่าจาก intent ที่แล้วมาใช้
         studentStrings = getIntent().getStringArrayExtra("GetIDStudent"); //นำค่าจากหน้าที่แล้วมาจาก putextra
 
-        getJoblist(studentStrings[0]);
+        //นำค่าที่ได้ไปใช้ใน class getjob
+         getJoblist(studentStrings[0]);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+                startActivity(getIntent());
+            }
+        });
+
+
 
 
     } // Main Method
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        finish();
+        startActivity(getIntent());
+
+        }
 
 
     private void getJoblist(String studentString){
@@ -106,6 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         public showJoblist(Context context) {
             this.context = context;
         }
+
 
         @Override
         protected String doInBackground(String... strings) {
@@ -157,8 +190,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if (aBoolean) {
 
-                    Alert alert = new Alert();
-                    alert.myDialog(context, "ไม่มี ข้อมูลนี้ในระบบ", "ไม่มี " + ID_StudentString + " ในระบบของเรา");
                     Toast.makeText(MapsActivity.this,
                             "รถโรงเรียนยังไม่ทำการใช้งาน หรือ ยังไม่ถึงเวลาที่กำหนด",Toast.LENGTH_LONG).show();
 
@@ -167,10 +198,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     Log.d("TestJoblist", "Result " + ID_StudentString + " OK");
 
-                    dateTextView.setText(resultStrings[1]);
-                    timeinTextView.setText("Time In : " + resultStrings[2]);
-                    timeoutTextView.setText("Time Out : " + resultStrings[3]);
-                }
+
+                        dateTextView.setText(resultStrings[1]);
+                        timeinTextView.setText("Time In : " + resultStrings[2]);
+                        timeoutTextView.setText("Time Out : " + resultStrings[3]);
+
+
+                        switch (resultStrings[6]) {
+
+                            case "0":
+                                Picasso.with(context).load(R.drawable.stat0).into(statImageView);
+                                Toast.makeText(MapsActivity.this,
+                                        "นักเรียนได้ทำการลงจากรถเรียบร้อยแล้ว", Toast.LENGTH_LONG).show();
+                                break;
+
+                            case "1":
+                                Picasso.with(context).load(R.drawable.stat1).into(statImageView);
+                                Toast.makeText(MapsActivity.this,
+                                        "นักเรียนได้ทำการขึ้นรถเรียบร้อยแล้ว", Toast.LENGTH_LONG).show();
+                                        break;
+
+                            case "2":
+                                Picasso.with(context).load(R.drawable.stat2).into(statImageView);
+                                Toast.makeText(MapsActivity.this,
+                                        "คุณครูได้ทำการลาป่วย/ไม่มาโรงเรียนเรียบร้อยแล้ว", Toast.LENGTH_LONG).show();
+                                break;
+
+
+                        }
+
+                    }
 
                 //นำค่าที่มีใน class นี้ไปใช้ยังอีกคลาสตามต้องการ
                 getGPS(resultStrings[5]);
@@ -275,17 +332,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Log.d("TestJoblist", "GPSGO ==> " + teacherStrings[7]);
                     Log.d("TestJoblist", "GPSGO ==> " + teacherStrings[8]);
 
+
+
                     LatLng getGPS = new LatLng(Double.parseDouble(teacherStrings[7]),
                             Double.parseDouble(teacherStrings[8]));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(getGPS));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getGPS, 16));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getGPS, 17));
 
                     //Create Marker
-                    mMap.addMarker(new MarkerOptions()
-                            .position(getGPS)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.vans))
-                            .title("Bus " + teacherStrings[1]));
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(teacherStrings[7]),
+                                    Double.parseDouble(teacherStrings[8])))
+                            .title("Bus " + teacherStrings[1]);
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_icon));
+                    mMap.addMarker(markerOptions);
                 }
+
 
             } catch (Exception e) {
 
